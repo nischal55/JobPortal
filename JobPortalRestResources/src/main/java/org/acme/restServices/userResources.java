@@ -1,10 +1,7 @@
 package org.acme.restServices;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.bean.UserDetailBean;
@@ -23,4 +20,27 @@ public class userResources {
         return userDetailBean.createUser(userDetail);
     }
 
+    @POST
+    @Path("/findAll")
+    public Response findAll(UserDetail userDetail){
+        return userDetailBean.findAll();
+    }
+
+    @GET
+    @Path("/findById")
+    public Response findById(Long userId){
+        return userDetailBean.findById(userId);
+    }
+
+    @PUT
+    @Path("/update")
+    public Response update(UserDetail userDetail){
+        return userDetailBean.update(userDetail);
+    }
+
+    @DELETE
+    @Path("/delete")
+    public Response delete(UserDetail userDetail){
+        return userDetailBean.delete(userDetail);
+    }
 }
