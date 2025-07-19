@@ -66,4 +66,12 @@ public class UserDetailController {
             return Boolean.FALSE;
         }
     }
+
+    public UserDetail authenticate(String username, String password) {
+        UserDetail user = userFacade.findByUsername(username);
+        if (user != null && hashPasswordUtil.verify(password, user.getPassword())) {
+            return user;
+        }
+        return null;
+    }
 }

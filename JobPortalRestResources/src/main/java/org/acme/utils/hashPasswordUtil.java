@@ -1,12 +1,13 @@
 package org.acme.utils;
 
-import java.security.MessageDigest;
-import java.util.Base64;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class hashPasswordUtil {
-    public static String hash(String password) throws Exception {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hashedBytes = md.digest(password.getBytes("UTF-8"));
-        return Base64.getEncoder().encodeToString(hashedBytes);
+    public static String hash(String plainPassword) {
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt());
+    }
+
+    public static boolean verify(String plainPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainPassword, hashedPassword);
     }
 }

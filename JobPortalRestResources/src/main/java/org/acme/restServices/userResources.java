@@ -2,8 +2,10 @@ package org.acme.restServices;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.UriInfo;
 import org.acme.bean.UserDetailBean;
 import org.acme.models.UserDetail;
 
@@ -42,5 +44,11 @@ public class userResources {
     @Path("/delete")
     public Response delete(UserDetail userDetail){
         return userDetailBean.delete(userDetail);
+    }
+
+    @POST
+    @Path("/login")
+    public Response login(UserDetail userDetail,@Context UriInfo uriInfo){
+        return userDetailBean.login(userDetail,uriInfo);
     }
 }

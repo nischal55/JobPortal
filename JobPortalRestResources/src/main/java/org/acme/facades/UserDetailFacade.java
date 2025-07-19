@@ -3,6 +3,8 @@ package org.acme.facades;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 import org.acme.models.UserDetail;
 
 @ApplicationScoped
@@ -18,5 +20,16 @@ public class UserDetailFacade extends AbstractFacade<UserDetail> {
     @Override
     public EntityManager getEntityManager(){
         return em;
+    }
+
+    public UserDetail findByUsername(String username) {
+        try {
+            TypedQuery<UserDetail> query = em.createQuery(
+                    "SELECT u FROM UserDetail u WHERE u.username = :username", UserDetail.class
+            );
+            return query.setParameter("username", username).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
