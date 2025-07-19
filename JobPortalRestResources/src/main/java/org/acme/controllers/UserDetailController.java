@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.acme.facades.UserDetailFacade;
 import org.acme.models.UserDetail;
+import org.acme.utils.hashPasswordUtil;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ public class UserDetailController {
         }
 
         try{
+            String hashedPassword = hashPasswordUtil.hash(userDetail.getPassword());
+            userDetail.setPassword(hashedPassword);
             userFacade.create(userDetail);
             return userDetail;
         }catch(Exception e){
