@@ -7,7 +7,7 @@ import jakarta.ws.rs.core.Response;
 import org.acme.bean.UserDetailBean;
 import org.acme.models.UserDetail;
 
-@Path("/user")
+@Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class userResources {
@@ -20,7 +20,7 @@ public class userResources {
         return userDetailBean.createUser(userDetail);
     }
 
-    @POST
+    @GET
     @Path("/findAll")
     public Response findAll(UserDetail userDetail){
         return userDetailBean.findAll();

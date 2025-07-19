@@ -2,6 +2,7 @@ package org.acme.controllers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.acme.facades.UserDetailFacade;
 import org.acme.models.UserDetail;
 import org.acme.utils.hashPasswordUtil;
@@ -13,6 +14,7 @@ public class UserDetailController {
     @Inject
     UserDetailFacade userFacade;
 
+    @Transactional
     public UserDetail createUser(UserDetail userDetail){
         if(userDetail == null){
             return null;
@@ -24,6 +26,7 @@ public class UserDetailController {
             userFacade.create(userDetail);
             return userDetail;
         }catch(Exception e){
+            e.printStackTrace();
             return null;
         }
     }
@@ -44,6 +47,7 @@ public class UserDetailController {
         }
     }
 
+    @Transactional
     public UserDetail update(UserDetail userDetail){
         try{
             userFacade.edit(userDetail);
@@ -53,6 +57,7 @@ public class UserDetailController {
         }
     }
 
+    @Transactional
     public boolean deleteUser(UserDetail userDetail){
         try{
             userFacade.remove(userDetail);
