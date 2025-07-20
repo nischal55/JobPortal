@@ -4,9 +4,12 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import Aura from '@primeuix/themes/aura';
 import 'primeicons/primeicons.css';
-
+import { createPinia } from 'pinia'
 
 const app = createApp(App);
+
+
+app.use(createPinia())
 
 app.use(PrimeVue, {
     theme: {

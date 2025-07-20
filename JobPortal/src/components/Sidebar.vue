@@ -28,8 +28,20 @@
           <span v-if="isOpen" class="whitespace-nowrap">Dashboard</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+          <i class="pi pi-address-book text-lg"></i>
+          <span v-if="isOpen" class="whitespace-nowrap">Job Providers</span>
+        </a>
+         <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-users text-lg"></i>
-          <span v-if="isOpen" class="whitespace-nowrap">Users</span>
+          <span v-if="isOpen" class="whitespace-nowrap">Job Seekers</span>
+        </a>
+        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+          <i class="pi pi-briefcase text-lg"></i>
+          <span v-if="isOpen" class="whitespace-nowrap">Jobs Available</span>
+        </a>
+          <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+          <i class="pi pi-list-check text-lg"></i>
+          <span v-if="isOpen" class="whitespace-nowrap">Jobs Applicants</span>
         </a>
         <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-cog text-lg"></i>
@@ -78,7 +90,7 @@
       </nav>
 
       <!-- Slot for page content -->
-      <main class="flex-1 overflow-auto bg-surface-50 dark:bg-surface-900 p-6">
+      <main class="flex-1 overflow-auto bg-surface-50 dark:bg-surface-900 py-6 px-1">
         <slot />
       </main>
     </div>
