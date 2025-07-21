@@ -1,4 +1,5 @@
 <template>
+    <sidebar>
     <div class="bg-surface-50 dark:bg-surface-950 px-6 py-8 md:px-12 lg:px-20">
         <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div class="bg-surface-0 dark:bg-surface-900 shadow-sm p-5 rounded-2xl">
@@ -65,5 +66,8 @@
             </div>
         </div>
     </div>
+    </sidebar>
 </template>
-<script setup></script>
+<script setup>
+import Sidebar from '@/components/Sidebar.vue';
+</script>

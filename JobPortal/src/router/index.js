@@ -1,10 +1,16 @@
-import UserLogin from '@/pages/user-login.vue'
+import Dashboard from '@/pages/dashboard.vue';
+import UserLogin from '@/pages/UserLogin.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
     {
-        path: '/user-login',
-        name: 'user-login',
+        path: '/userLogin',
+        name: 'userLogin',
         component: UserLogin,
+    },
+    {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: Dashboard,
     },
 
 ]
@@ -14,9 +20,4 @@ const router = createRouter({
     routes,
 })
 
-// Global navigation guard
-router.beforeEach((to, from, next) => {
-
-})
-
-export default router
+export default router;
