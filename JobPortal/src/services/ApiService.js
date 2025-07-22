@@ -1,25 +1,22 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:8888', // change to your backend
-  withCredentials: true,            // Send cookies on every request
+  baseURL: 'http://localhost:8888',
+  withCredentials: true,
 })
 
 let isRefreshing = false
 let failedQueue = []
 
-const processQueue = (error, response = null) => {
+const processQueue = (error = null) => {
   failedQueue.forEach(prom => {
-    if (error) {
-      prom.reject(error)
-    } else {
-      prom.resolve(response)
-    }
+    if (error) prom.reject(error)
+    else prom.resolve()
   })
   failedQueue = []
 }
 
-// Add response interceptor
+
 api.interceptors.response.use(
   res => res,
   async err => {
@@ -29,7 +26,6 @@ api.interceptors.response.use(
       originalRequest._retry = true
 
       if (isRefreshing) {
-        // Queue up if refresh already in progress
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject })
         }).then(() => api(originalRequest))
@@ -40,10 +36,10 @@ api.interceptors.response.use(
       try {
         await api.post('/auth/refresh-token') 
         processQueue(null)
-        return api(originalRequest) 
+        return api(originalRequest)
       } catch (refreshErr) {
         processQueue(refreshErr)
-        window.location.href = '/login' 
+        //window.location.href = '/userLogin'
         return Promise.reject(refreshErr)
       } finally {
         isRefreshing = false

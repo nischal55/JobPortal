@@ -2,6 +2,7 @@ package org.acme.bean;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.CookieParam;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.NewCookie;
 import jakarta.ws.rs.core.Response;
@@ -9,14 +10,19 @@ import jakarta.ws.rs.core.UriInfo;
 import org.acme.controllers.UserDetailController;
 import org.acme.models.UserDetail;
 import org.acme.utils.JwtUtil;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class UserDetailBean {
 
     @Inject
     UserDetailController userDetailController;
+
+    @Inject
+    JwtUtil jwtUtil;
 
     public Response createUser(UserDetail userDetail){
         if(userDetail.getId() == null){
@@ -94,4 +100,60 @@ public class UserDetailBean {
                 .entity("{\"message\":\"Login successful\"}")
                 .build();
     }
+
+    public Response refreshAccessToken(@CookieParam("refresh_token") String refreshToken) {
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of("error", "Refresh token missing"))
+                    .build();
+        }
+
+        try {
+            JsonWebToken parsedToken = jwtUtil.parseToken(refreshToken);
+            String username = parsedToken.getSubject();
+            String role = parsedToken.getGroups().stream().findFirst().orElse("user");
+
+            String newAccessToken = JwtUtil.generateAccessToken(username, role);
+
+            return Response.ok(Map.of("access_token", newAccessToken)).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of("error", "Invalid or expired refresh token"))
+                    .build();
+        }
+    }
+
+    public Response checkAccessToken(String accessToken) {
+        System.out.println("Checking access token: " + accessToken);
+
+        if (accessToken == null || accessToken.isBlank()) {
+            System.out.println("Access token missing");
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of("error", "Access token missing"))
+                    .build();
+        }
+
+        try {
+            JsonWebToken parsedToken = jwtUtil.parseToken(accessToken);
+            System.out.println("Parsed token: " + parsedToken);
+
+            String username = parsedToken.getSubject();
+            String role = parsedToken.getGroups().stream().findFirst().orElse("user");
+
+            System.out.println("Username from token: " + username + ", role: " + role);
+
+            return Response.ok(Map.of(
+                    "message", "Access token valid",
+                    "username", username,
+                    "role", role
+            )).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity(Map.of("error", "Invalid or expired access token"))
+                    .build();
+        }
+    }
+
 }
