@@ -1,5 +1,6 @@
 package org.acme.bean;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import org.acme.controllers.JobSeekerController;
@@ -7,6 +8,7 @@ import org.acme.models.JobSeekerDetail;
 
 import java.util.List;
 
+@ApplicationScoped
 public class JobSeekerBean {
     @Inject
     JobSeekerController jobSeekerController;

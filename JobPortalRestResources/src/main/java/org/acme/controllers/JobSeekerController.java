@@ -1,18 +1,19 @@
 package org.acme.controllers;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.acme.facades.JobSeekerDetailFacade;
 import org.acme.models.JobSeekerDetail;
 
 import java.util.List;
 
+@ApplicationScoped
 public class JobSeekerController {
-    @Inject
-    JobSeekerDetail jobSeekerDetail;
-
     @Inject
     JobSeekerDetailFacade jobSeekerDetailFacade;
 
+    @Transactional
     public void createAccount(JobSeekerDetail jobSeekerDetail){
         try{
             jobSeekerDetailFacade.create(jobSeekerDetail);

@@ -11,8 +11,6 @@ import org.acme.models.JobSeekerDetail;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class jobSeekerResources {
-    @Inject
-    JobSeekerDetail jobSeekerDetail;
 
     @Inject
     JobSeekerBean jobSeekerBean;

@@ -1,9 +1,11 @@
 package org.acme.facades;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import org.acme.models.JobSeekerDetail;
 
+@ApplicationScoped
 public class JobSeekerDetailFacade extends AbstractFacade<JobSeekerDetail>{
     @Inject
     EntityManager em;
