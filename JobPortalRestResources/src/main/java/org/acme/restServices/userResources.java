@@ -28,13 +28,13 @@ public class userResources {
     }
 
     @GET
-    @Path("/findById")
-    public Response findById(Long userId){
+    @Path("/findById/{userId}")
+    public Response findById(@PathParam("userId") Long userId){
         return userDetailBean.findById(userId);
     }
 
     @PUT
-    @Path("/update")
+    @Path("/update/{userId}")
     public Response update(UserDetail userDetail){
         return userDetailBean.update(userDetail);
     }
