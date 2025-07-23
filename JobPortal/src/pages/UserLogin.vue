@@ -27,7 +27,7 @@
 
       <div class="flex flex-col gap-6 w-full">
         <div class="flex flex-col gap-2 w-full">
-          <label for="email1" class="text-gray-900 dark:text-white font-medium leading-normal">username</label>
+          <label for="email1" class="text-gray-900 dark:text-white font-medium leading-normal">Username</label>
           <InputText
             id="email1"
             type="text"
@@ -47,12 +47,8 @@
           />
         </div>
         <div
-          class="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-3 sm:gap-0"
+          class="flex flex-col sm:flex-row items-start sm:items-center justify-end w-full gap-3 sm:gap-0"
         >
-          <div class="flex items-center gap-2">
-            <Checkbox id="rememberme1" v-model="checked1" :binary="true" />
-            <label for="rememberme1" class="text-gray-900 dark:text-white leading-normal">Remember me</label>
-          </div>
           <a class="text-blue-600 font-medium cursor-pointer hover:text-blue-700">Forgot your password?</a>
         </div>
       </div>

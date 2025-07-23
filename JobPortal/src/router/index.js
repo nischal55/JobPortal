@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '@/pages/dashboard.vue'
 import UserLogin from '@/pages/UserLogin.vue'
 import ApiService from '@/services/ApiService'
+import JobSeeker from '@/pages/JobSeeker.vue'
 
 const routes = [
   {
@@ -15,6 +16,13 @@ const routes = [
     component: Dashboard,
     meta: { requiresAuth: true },
   },
+  {
+    path: '/jobseeker',
+    name: 'jobseeker',
+    component: JobSeeker,
+    meta: { requiresAuth: true },
+  },
+
 ]
 
 const router = createRouter({
