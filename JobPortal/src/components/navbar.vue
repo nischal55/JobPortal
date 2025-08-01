@@ -29,7 +29,7 @@
           >
             <div
               v-if="dropdownOpen"
-              class="absolute right-0 mt-2 w-48 bg-surface-0 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-md shadow-lg z-50"
+              class="absolute z-10 right-0 mt-2 w-48 bg-surface-0 dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-md shadow-lg z-50"
             >
               <a href="#" class="block px-4 py-2 text-sm text-surface-700 dark:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-700">My Profile</a>
               <a href="#" class="block px-4 py-2 text-sm text-surface-700 dark:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-700">Settings</a>
