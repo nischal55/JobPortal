@@ -5,6 +5,7 @@ import ApiService from '@/services/ApiService'
 import JobSeeker from '@/pages/JobSeeker.vue'
 import HomePage from '@/pages/HomePage.vue'
 import JobSeekerCreate from '@/pages/JobSeekerCreate.vue'
+import Registration from '@/pages/Registration.vue'
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
     path: '/jobseekerAccountCreation',
     name: 'jobseekerAccountCreation',
     component : JobSeekerCreate
+  },
+  {
+    path: '/registration',
+    name: 'registration',
+    component : Registration
   }
 
 ]

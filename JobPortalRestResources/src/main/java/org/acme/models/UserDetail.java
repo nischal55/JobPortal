@@ -19,6 +19,14 @@ public class UserDetail extends BaseEntity{
     @Column(name="created_at",nullable = false)
     private LocalDate createdAt;
 
+
+    @PrePersist
+    public void setCreatedAtDefault() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDate.now();
+        }
+    }
+
     public enum Role{
         seeker,provider,admin
     }
