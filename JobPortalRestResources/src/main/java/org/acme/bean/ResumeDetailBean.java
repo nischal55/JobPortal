@@ -16,7 +16,7 @@ public class ResumeDetailBean {
     public Response create(ResumeDetail resumeDetail){
         try{
             resumeDetailController.create(resumeDetail);
-            return Response.status(Response.Status.CREATED).entity("Created Successfully").build();
+            return Response.status(Response.Status.CREATED).entity(resumeDetail).build();
         }catch (Exception e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to create").build();
         }

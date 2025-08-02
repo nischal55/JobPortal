@@ -2,6 +2,7 @@ package org.acme.controllers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.acme.facades.ResumeCertificationFacade;
 import org.acme.facades.ResumeDetailFacade;
 import org.acme.models.ResumeCertification;
@@ -14,6 +15,7 @@ public class ResumeCertificationController {
     @Inject
     ResumeCertificationFacade resumeCertificationFacade;
 
+    @Transactional
     public void create(ResumeCertification resumeCertification) {
         try {
             resumeCertificationFacade.create(resumeCertification);

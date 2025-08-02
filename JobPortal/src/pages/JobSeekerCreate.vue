@@ -247,40 +247,51 @@ function removeExperience(index) {
 
 async function submitResume() {
   try {
-    // 1. Create Job Seeker
-    const jobSeekerRes = await ApiService.post('/jobseeker/create', personalInfo.value);
-    const jobSeekerId = jobSeekerRes.data.id;
-
-    // 2. Create Education Records
-    const educationIds = [];
-    for (const edu of educationList.value) {
-      const eduRes = await ApiService.post('/education/create', edu);
-      educationIds.push(eduRes.data.id);
+    // Step 1: Get user_id from localStorage
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+      alert("User ID not found. Please login again.");
+      return;
     }
 
-    // 3. Create Certification Records
-    const certificationIds = [];
-    for (const cert of certificationList.value) {
-      const certRes = await ApiService.post('/certification/create', cert);
-      certificationIds.push(certRes.data.id);
-    }
-
-    // 4. Create Experience Records
-    const experienceIds = [];
-    for (const exp of experienceList.value) {
-      const expRes = await ApiService.post('/experience/create', exp);
-      experienceIds.push(expRes.data.id);
-    }
-
-    // 5. Create Resume Detail Record (link all)
-    const resumeDetail = {
-      user_id: jobSeekerId,
-      educational_id: educationIds[0], // Adjust if you support multiple
-      certification_id: certificationIds[0],
-      experience_id: experienceIds[0]
+    // Step 2: Create ResumeDetail first
+    const resumeDetailPayload = {
+      user: { id: userId },  // Match your backend entity structure
+      title: "My Resume",    // You might want to make this dynamic
     };
 
-    await ApiService.post('/resumedetail/create', resumeDetail);
+    const resumeRes = await ApiService.post('/resumeDetail/create', resumeDetailPayload);
+    const resumeId = resumeRes.data.id;
+
+    // Step 3: Create Education Records
+    for (const edu of educationList.value) {
+      await ApiService.post('/education/create', {
+        ...edu,
+        resume: { id: resumeId }  // Match your entity relationship
+      });
+    }
+
+    // Step 4: Create Certification Records
+    for (const cert of certificationList.value) {
+      await ApiService.post('/certification/create', {
+        certificationTitle: cert.certificationTitle,
+        issuingOrg: cert.issuingOrg,
+        issueDate: cert.issueDate,
+        resume: { id: resumeId }
+      });
+    }
+
+    // Step 5: Create Experience Records
+    for (const exp of experienceList.value) {
+      await ApiService.post('/resumeExperiences/create', {
+        jobTitle: exp.jobTitle,
+        companyName: exp.companyName,
+        startDate: exp.startDate,
+        endDate: exp.endDate,
+        description: exp.description,
+        resume: { id: resumeId }
+      });
+    }
 
     alert('Resume submitted successfully!');
   } catch (err) {

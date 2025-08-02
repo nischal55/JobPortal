@@ -2,6 +2,7 @@ package org.acme.controllers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.acme.facades.ResumeExperienceFacade;
 import org.acme.models.ResumeExperience;
 
@@ -12,6 +13,7 @@ public class ResumeExperienceController {
     @Inject
     ResumeExperienceFacade resumeExperienceFacade;
 
+    @Transactional
     public void create(ResumeExperience resumeExperience){
         try{
             resumeExperienceFacade.create(resumeExperience);
