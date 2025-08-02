@@ -91,13 +91,34 @@ const login = async () => {
   loading.value = true;
 
   try {
-    await ApiService.post('/users/login', {
+    const response = await ApiService.post('/users/login', {
       username: email.value,
       password: password.value,
     });
-    // Redirect to dashboard on successful login
-    router.push({ name: 'dashboard' });
+
+    console.log('Login Response:', response.data);
+
+    const { id, username, role } = response.data;
+
+    if (!id || !username || !role) {
+      throw new Error("Incomplete login response");
+    }
+
+    localStorage.setItem('user_id', id);
+    localStorage.setItem('username', username);
+    localStorage.setItem('user_role', role);
+
+    if (role === "admin") {
+      router.push({ name: 'dashboard' });
+    } else if (role === "provider") {
+      router.push({ name: 'JobSeeker' });
+    } else {
+      router.push({ name: 'home' });
+    }
+
   } catch (error) {
+    console.error("Login error:", error);
+
     if (error.response?.data?.message) {
       errorMsg.value = error.response.data.message;
     } else {
@@ -107,6 +128,9 @@ const login = async () => {
     loading.value = false;
   }
 };
+
+
+
 </script>
 
 <style scoped>

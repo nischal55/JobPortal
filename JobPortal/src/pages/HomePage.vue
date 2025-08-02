@@ -26,6 +26,5 @@ const searchQuery = ref('');
 
 function searchJobs() {
   console.log('Searching for:', searchQuery.value);
-  // You can add your actual search logic or API call here
 }
 </script>

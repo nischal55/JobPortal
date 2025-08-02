@@ -1,6 +1,6 @@
 <template>
   <Navbar />
-  <div class="card flex justify-center mt-10">
+  <div class="card flex justify-center mt-16">
     <Stepper value="1" linear class="basis-[50rem]">
       <StepList>
         <Step value="1">Personal Detail</Step>
@@ -167,13 +167,9 @@
                 </div>
               </div>
             </div>
-
-            <div class="mt-4">
-            </div>
-
             <div class="flex pt-6 justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('2')" />
-              <Button label="Submit" icon="pi pi-check" iconPos="right" />
+              <Button label="Submit" icon="pi pi-check" iconPos="right" @click="submitResume"/>
             </div>
           </div>
         </StepPanel>
@@ -186,6 +182,7 @@
 <script setup>
 import { ref } from 'vue';
 import Navbar from '@/components/navbar.vue';
+import ApiService from '@/services/ApiService';
 import {
   Button,
   Step,
@@ -247,4 +244,49 @@ function addExperience() {
 function removeExperience(index) {
   experienceList.value.splice(index, 1);
 }
+
+async function submitResume() {
+  try {
+    // 1. Create Job Seeker
+    const jobSeekerRes = await ApiService.post('/jobseeker/create', personalInfo.value);
+    const jobSeekerId = jobSeekerRes.data.id;
+
+    // 2. Create Education Records
+    const educationIds = [];
+    for (const edu of educationList.value) {
+      const eduRes = await ApiService.post('/education/create', edu);
+      educationIds.push(eduRes.data.id);
+    }
+
+    // 3. Create Certification Records
+    const certificationIds = [];
+    for (const cert of certificationList.value) {
+      const certRes = await ApiService.post('/certification/create', cert);
+      certificationIds.push(certRes.data.id);
+    }
+
+    // 4. Create Experience Records
+    const experienceIds = [];
+    for (const exp of experienceList.value) {
+      const expRes = await ApiService.post('/experience/create', exp);
+      experienceIds.push(expRes.data.id);
+    }
+
+    // 5. Create Resume Detail Record (link all)
+    const resumeDetail = {
+      user_id: jobSeekerId,
+      educational_id: educationIds[0], // Adjust if you support multiple
+      certification_id: certificationIds[0],
+      experience_id: experienceIds[0]
+    };
+
+    await ApiService.post('/resumedetail/create', resumeDetail);
+
+    alert('Resume submitted successfully!');
+  } catch (err) {
+    console.error('Submit failed:', err);
+    alert('Failed to submit resume. Please try again.');
+  }
+}
+
 </script>

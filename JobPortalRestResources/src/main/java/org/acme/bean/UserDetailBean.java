@@ -95,9 +95,11 @@ public class UserDetailBean {
         NewCookie accessCookie = new NewCookie("access_token", accessToken, "/", null, "access", 900, false, true);
         NewCookie refreshCookie = new NewCookie("refresh_token", refreshToken, "/", null, "refresh", 604800, false, true);
 
+        user.setPassword(null);
+
         return Response.ok()
                 .cookie(accessCookie, refreshCookie)
-                .entity("{\"message\":\"Login successful\"}")
+                .entity(user)
                 .build();
     }
 
