@@ -27,7 +27,7 @@
           <i class="pi pi-home text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Dashboard</span>
         </a>
-        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+        <a href="#" v-if="userRole === 'admin'" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-address-book text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Job Providers</span>
         </a>
@@ -89,6 +89,15 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('click', onClickOutside)
 })
+
+
+const userRole = ref(null)
+
+onMounted(() => {
+  userRole.value = localStorage.getItem('user_role')
+})
+
+
 </script>
 
 <style scoped>

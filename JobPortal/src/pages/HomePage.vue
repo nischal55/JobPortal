@@ -1,6 +1,9 @@
 <template>
-  <navbar />
-  <div class="h-[35rem] w-full bg-black flex flex-col items-center justify-center text-white">
+  <!-- Fixed navbar -->
+  <navbar class="fixed top-0 left-0 w-full z-[9999]" />
+
+  <!-- Main hero section -->
+  <div class="pt-[80px] h-[35rem] w-full bg-black flex flex-col items-center justify-center text-white">
     <div class="text-5xl font-semibold text-center">
       Find Your Dream Job Today!
     </div>

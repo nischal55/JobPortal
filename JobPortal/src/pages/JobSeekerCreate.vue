@@ -281,6 +281,11 @@ async function submitResume() {
       });
     }
 
+    await ApiService.post('/jobseeker/create',{
+      ...personalInfo.value,
+      resume : {id:resumeId}
+    })
+
     // Step 5: Create Experience Records
     for (const exp of experienceList.value) {
       await ApiService.post('/resumeExperiences/create', {

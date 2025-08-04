@@ -2,6 +2,7 @@ package org.acme.controllers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.acme.facades.JobProviderDetailFacade;
 import org.acme.models.JobProviderDetail;
 
@@ -12,6 +13,7 @@ public class JobProviderController {
     @Inject
     JobProviderDetailFacade jobProviderDetailFacade;
 
+    @Transactional
     public void createJobProvider(JobProviderDetail jobProviderDetail){
         try{
             jobProviderDetailFacade.create(jobProviderDetail);

@@ -6,6 +6,7 @@ import JobSeeker from '@/pages/JobSeeker.vue'
 import HomePage from '@/pages/HomePage.vue'
 import JobSeekerCreate from '@/pages/JobSeekerCreate.vue'
 import Registration from '@/pages/Registration.vue'
+import JobProviderCreate from '@/pages/JobProviderCreate.vue'
 
 const routes = [
   {
@@ -39,6 +40,11 @@ const routes = [
     path: '/registration',
     name: 'registration',
     component : Registration
+  },
+  {
+    path: '/jobProviderCreation',
+    name: 'jobProviderCreation',
+    component : JobProviderCreate
   }
 
 ]
