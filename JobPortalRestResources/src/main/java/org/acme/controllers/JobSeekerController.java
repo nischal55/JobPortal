@@ -23,12 +23,10 @@ public class JobSeekerController {
     }
 
     public List<JobSeekerDetail> findAll(){
-        List<JobSeekerDetail> jobSeekerDetails = null;
         try{
-            jobSeekerDetails = jobSeekerDetailFacade.findAll();
-            return jobSeekerDetails;
+           return jobSeekerDetailFacade.findAll();
         }catch(Exception e){
-            return jobSeekerDetails;
+            return null;
         }
     }
 

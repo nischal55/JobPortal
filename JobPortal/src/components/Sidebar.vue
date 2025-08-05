@@ -31,7 +31,7 @@
           <i class="pi pi-address-book text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Job Providers</span>
         </a>
-         <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+         <a href="#" v-if="userRole==='admin'" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-users text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Job Seekers</span>
         </a>

@@ -111,7 +111,7 @@ const login = async () => {
     if (role === "admin") {
       router.push({ name: 'dashboard' });
     } else if (role === "provider") {
-      router.push({ name: 'JobSeeker' });
+      router.push({ name: 'dashboard' });
     } else {
       router.push({ name: 'home' });
     }

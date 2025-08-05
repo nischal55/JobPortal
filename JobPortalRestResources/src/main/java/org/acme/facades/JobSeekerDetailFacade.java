@@ -5,6 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import org.acme.models.JobSeekerDetail;
 
+import java.util.List;
+
 @ApplicationScoped
 public class JobSeekerDetailFacade extends AbstractFacade<JobSeekerDetail>{
     @Inject

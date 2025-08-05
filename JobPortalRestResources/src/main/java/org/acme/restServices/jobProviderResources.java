@@ -22,7 +22,7 @@ public class jobProviderResources {
     }
 
     @GET
-    @Path("findAll")
+    @Path("/findAll")
     public Response findAll(){
         return jobProviderBean.findAll();
     }

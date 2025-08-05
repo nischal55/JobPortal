@@ -23,9 +23,8 @@ public class JobSeekerBean {
     }
 
     public Response findAll(){
-        List<JobSeekerDetail> jobSeekerDetailList = null;
         try{
-            jobSeekerDetailList = jobSeekerController.findAll();
+            List<JobSeekerDetail> jobSeekerDetailList = jobSeekerController.findAll();
             return Response.status(Response.Status.ACCEPTED).entity(jobSeekerDetailList).build();
         }catch (Exception e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to Fetch list").build();

@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "job_seeker_details")
 public class JobSeekerDetail extends BaseEntity{
-    @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     private UserDetail user;
 
     @Column(name="contact_no", nullable = false)
