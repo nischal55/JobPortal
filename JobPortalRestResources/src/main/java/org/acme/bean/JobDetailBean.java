@@ -1,4 +1,33 @@
 package org.acme.bean;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
+import org.acme.controllers.JobDetailController;
+import org.acme.models.JobDetail;
+
+import java.util.List;
+
+@ApplicationScoped
 public class JobDetailBean {
+    @Inject
+    JobDetailController jobDetailController;
+
+    public Response findAllJob(){
+        try{
+            List<JobDetail> jobDetailList =  jobDetailController.jobDetailList();
+            return Response.status(Response.Status.ACCEPTED).entity(jobDetailList).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to fetch JobList").build();
+        }
+    }
+
+    public Response createJob(JobDetail jobDetail){
+        try{
+            jobDetailController.createJob(jobDetail);
+            return Response.status(Response.Status.CREATED).entity(jobDetail).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Failed to create").build();
+        }
+    }
 }
