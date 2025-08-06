@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class JobDetail extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "provider_id")
-    private JobProviderDetail provider;
+    private UserDetail provider;
 
     @Column(name = "job_title", nullable = false)
     private String title;
@@ -24,10 +24,10 @@ public class JobDetail extends BaseEntity{
     @Column(name = "salary_range")
     private String salaryRange;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false,columnDefinition = "TEXT")
     private String description;
 
-    @Column(name="requirements", nullable = false)
+    @Column(name="requirements", nullable = false,columnDefinition = "TEXT")
     private String requirements;
 
     @Column(name = "deadLine", nullable = false)
@@ -40,11 +40,11 @@ public class JobDetail extends BaseEntity{
         full_time, part_time, internship, contract
     }
 
-    public JobProviderDetail getProvider() {
+    public UserDetail getProvider() {
         return provider;
     }
 
-    public void setProvider(JobProviderDetail provider) {
+    public void setProvider(UserDetail provider) {
         this.provider = provider;
     }
 
