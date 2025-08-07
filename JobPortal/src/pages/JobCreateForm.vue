@@ -21,13 +21,7 @@
             <!-- Description -->
             <div>
               <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <Textarea
-                v-model="job.description"
-                id="description"
-                rows="4"
-                placeholder="Brief description of the role"
-                class="w-full"
-              />
+              <Editor v-model="job.description" id="description" class="w-full" editorStyle="height: 200px" />
             </div>
 
             <!-- Location -->
@@ -39,46 +33,27 @@
             <!-- Salary Range -->
             <div>
               <label for="salaryRange" class="block text-sm font-medium text-gray-700 mb-1">Salary Range</label>
-              <InputText
-                v-model="job.salaryRange"
-                id="salaryRange"
-                placeholder="e.g. 50000 - 80000 NPR"
-                class="w-full"
-              />
+              <InputText v-model="job.salaryRange" id="salaryRange" placeholder="e.g. 50000 - 80000 NPR"
+                class="w-full" />
             </div>
 
             <!-- Job Type -->
             <div>
               <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Job Type</label>
-              <Dropdown
-                v-model="job.type"
-                :options="types"
-                placeholder="Select job type"
-                class="w-full"
-              />
+              <Dropdown v-model="job.type" :options="types" placeholder="Select job type" class="w-full" />
             </div>
 
             <!-- Requirements -->
             <div>
               <label for="requirements" class="block text-sm font-medium text-gray-700 mb-1">Requirements</label>
-              <Textarea
-                v-model="job.requirements"
-                id="requirements"
-                rows="3"
-                placeholder="e.g. Bachelor's degree, 2 years experience"
-                class="w-full"
-              />
+              <Editor v-model="job.requirements" id="requirements" class="w-full" editorStyle="height: 150px" />
             </div>
 
             <!-- Deadline -->
             <div>
               <label for="deadline" class="block text-sm font-medium text-gray-700 mb-1">Deadline</label>
-              <input
-                type="date"
-                id="deadline"
-                v-model="job.deadline"
-                class="w-full border border-gray-300 rounded px-3 py-2"
-              />
+              <input type="date" id="deadline" v-model="job.deadline"
+                class="w-full border border-gray-300 rounded px-3 py-2" />
             </div>
 
             <!-- Submit Button -->
@@ -95,7 +70,7 @@
 <script setup>
 import { ref } from 'vue'
 import InputText from 'primevue/inputtext'
-import Textarea from 'primevue/textarea'
+import Editor from 'primevue/editor'
 import Dropdown from 'primevue/dropdown'
 import Button from 'primevue/button'
 import Sidebar from '@/components/Sidebar.vue'
@@ -114,7 +89,7 @@ const job = ref({
   requirements: '',
   deadline: '',
   provider: {
-    id : localStorage.getItem("user_id")
+    id: localStorage.getItem("user_id")
   }
 })
 
@@ -126,7 +101,6 @@ const submitForm = () => {
     .catch(error => {
       console.error('Error posting job:', error)
     })
-  
+
 }
 </script>
-
