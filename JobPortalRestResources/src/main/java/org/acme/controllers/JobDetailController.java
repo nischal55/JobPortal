@@ -29,4 +29,12 @@ public class JobDetailController {
             return null;
         }
     }
+
+    public JobDetail findById(Long id){
+        try{
+            return jobDetailFacade.find(id);
+        }catch(Exception e){
+            return null;
+        }
+    }
 }

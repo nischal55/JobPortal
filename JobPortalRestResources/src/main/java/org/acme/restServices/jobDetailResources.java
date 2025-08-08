@@ -26,4 +26,10 @@ public class jobDetailResources {
         return jobDetailBean.findAllJob();
     }
 
+    @GET
+//    @Path("/findById/{id}")
+    public Response findById(@PathParam("id") Long id){
+    return jobDetailBean.findJobById(id);
+    }
+
 }

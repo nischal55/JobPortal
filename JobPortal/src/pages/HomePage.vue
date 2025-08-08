@@ -62,6 +62,7 @@
       </div>
     </TransitionGroup>
   </div>
+  <Footer />
 </template>
 
 <script setup>
@@ -71,6 +72,7 @@ import { TransitionGroup, Transition } from 'vue'
 import navbar from '@/components/navbar.vue'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import Footer from '@/components/Footer.vue'
 
 const searchQuery = ref('')
 const jobs = ref([])

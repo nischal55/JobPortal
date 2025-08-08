@@ -30,4 +30,13 @@ public class JobDetailBean {
             return Response.status(Response.Status.BAD_REQUEST).entity("Failed to create").build();
         }
     }
+
+    public Response findJobById(Long id){
+        try{
+            JobDetail jobDetail = jobDetailController.findById(id);
+            return Response.status(Response.Status.ACCEPTED).entity(jobDetail).build();
+        }catch(Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("No Records found").build();
+        }
+    }
 }
