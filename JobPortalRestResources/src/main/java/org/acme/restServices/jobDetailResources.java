@@ -27,7 +27,7 @@ public class jobDetailResources {
     }
 
     @GET
-//    @Path("/findById/{id}")
+     @Path("/findById/{id}")
     public Response findById(@PathParam("id") Long id){
     return jobDetailBean.findJobById(id);
     }

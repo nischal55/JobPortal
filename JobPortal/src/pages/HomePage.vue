@@ -53,15 +53,19 @@
       >
         <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ job.title }}</h3>
         <div class="text-sm text-gray-500 mb-1">
-          📍 {{ job.location }} &nbsp; | &nbsp; 💼 {{ job.type }}
+          📍 {{ job.location }} &nbsp; | &nbsp; 💼 {{ formatType(job.type) }}
         </div>
         <div class="text-sm text-gray-500 mb-3">
           🕒 Deadline: {{ job.deadline }}
         </div>
-        <Button label="View Details" class="w-full mt-2" />
+        <router-link :to="`/jobDetail/${job.id}`" class="block">
+          <Button label="View Details" class="w-full mt-2" />
+        </router-link>
       </div>
     </TransitionGroup>
   </div>
+
+  <!-- Footer -->
   <Footer />
 </template>
 
@@ -69,10 +73,12 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { TransitionGroup, Transition } from 'vue'
+import { useRouter } from 'vue-router'
+
 import navbar from '@/components/navbar.vue'
+import Footer from '@/components/Footer.vue'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
-import Footer from '@/components/Footer.vue'
 
 const searchQuery = ref('')
 const jobs = ref([])
@@ -80,6 +86,17 @@ const ready = ref(false)
 
 function searchJobs() {
   console.log('Searching for:', searchQuery.value)
+  // You can implement filtered API fetch here
+}
+
+function formatType(type) {
+  switch (type) {
+    case 'full_time': return 'Full Time'
+    case 'part_time': return 'Part Time'
+    case 'internship': return 'Internship'
+    case 'contract': return 'Contract'
+    default: return type
+  }
 }
 
 async function fetchJobs() {

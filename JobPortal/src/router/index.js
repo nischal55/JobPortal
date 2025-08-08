@@ -8,6 +8,7 @@ import JobSeekerCreate from '@/pages/JobSeekerCreate.vue'
 import Registration from '@/pages/Registration.vue'
 import JobProviderCreate from '@/pages/JobProviderCreate.vue'
 import JobCreateForm from '@/pages/JobCreateForm.vue'
+import JobDetailView from '@/pages/JobDetailView.vue'
 
 const routes = [
   {
@@ -51,6 +52,11 @@ const routes = [
     path: '/jobCreateForm',
     name: 'jobCreateForm',
     component : JobCreateForm
+  },
+  {
+    path: '/jobDetail/:id',
+    name: 'jobDetail',
+    component : JobDetailView
   }
 
 ]
