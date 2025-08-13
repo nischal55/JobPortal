@@ -29,7 +29,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: HomePage,
   },

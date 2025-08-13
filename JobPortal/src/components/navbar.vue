@@ -9,7 +9,7 @@
     <div class="flex items-center space-x-8">
       <!-- Desktop menu -->
       <div class="hidden md:flex items-center space-x-8">
-        <router-link to="/home" class="text-gray-700 hover:text-gray-900"> <i class="pi pi-home"></i> Home</router-link>
+        <router-link to="/" class="text-gray-700 hover:text-gray-900"> <i class="pi pi-home"></i> Home</router-link>
         <router-link to="/jobs" class="text-gray-700 hover:text-gray-900"> <i class="pi pi-briefcase"></i>
           Jobs</router-link>
         <router-link to="/contact" class="text-gray-700 hover:text-gray-900"> <i class="pi pi-envelope"></i>
@@ -46,7 +46,7 @@
 
   <!-- Mobile menu -->
   <div v-if="isMobileMenuOpen" class="md:hidden px-8 py-2 bg-white shadow">
-    <router-link to="/home" class="block py-2 text-gray-700 hover:bg-gray-100">Home</router-link>
+    <router-link to="/" class="block py-2 text-gray-700 hover:bg-gray-100">Home</router-link>
     <router-link to="/jobs" class="block py-2 text-gray-700 hover:bg-gray-100">Jobs</router-link>
     <router-link to="/contact" class="block py-2 text-gray-700 hover:bg-gray-100">Contact</router-link>
   </div>
