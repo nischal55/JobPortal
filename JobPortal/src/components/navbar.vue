@@ -51,7 +51,6 @@
   <div v-if="isMobileMenuOpen" class="md:hidden px-8 py-2 bg-white shadow">
     <router-link to="/" class="block py-2 text-gray-700 hover:bg-gray-100">Home</router-link>
     <router-link to="/jobs" class="block py-2 text-gray-700 hover:bg-gray-100">Jobs</router-link>
-    <router-link to="/contact" class="block py-2 text-gray-700 hover:bg-gray-100">Contact</router-link>
   </div>
 </template>
 <script setup>
