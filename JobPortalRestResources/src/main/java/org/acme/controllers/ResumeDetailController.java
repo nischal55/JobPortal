@@ -39,4 +39,12 @@ public class ResumeDetailController {
             return null;
         }
     }
+
+    public ResumeDetail findByUserId(Long id){
+        try{
+            return resumeDetailFacade.findByUserId(id);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

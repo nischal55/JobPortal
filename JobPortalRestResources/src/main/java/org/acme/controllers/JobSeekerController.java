@@ -37,4 +37,12 @@ public class JobSeekerController {
             return null;
         }
     }
+
+    public JobSeekerDetail findByUserId(Long id){
+        try{
+            return jobSeekerDetailFacade.findByUserId(id);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

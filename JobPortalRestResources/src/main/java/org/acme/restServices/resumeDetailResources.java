@@ -31,4 +31,10 @@ public class resumeDetailResources {
     public Response findById(@PathParam("id") Long id){
         return resumeDetailBean.findById(id);
     }
+
+    @GET
+    @Path("/findByUserId/{id}")
+    public Response findByUserId(@PathParam("id") Long id){
+        return resumeDetailBean.findByUserId(id);
+    }
 }

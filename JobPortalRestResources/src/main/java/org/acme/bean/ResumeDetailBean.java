@@ -39,4 +39,13 @@ public class ResumeDetailBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
         }
     }
+
+    public Response findByUserId(Long id){
+        try{
+            ResumeDetail resumeDetail = resumeDetailController.findByUserId(id);
+            return Response.status(Response.Status.ACCEPTED).entity(resumeDetail).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
+        }
+    }
 }

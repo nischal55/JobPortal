@@ -32,4 +32,10 @@ public class jobSeekerResources {
     public Response findById(@PathParam("id") Long id){
         return jobSeekerBean.findById(id);
     }
+
+    @GET
+    @Path("/findByUserId/{id}")
+    public Response findByUserId(@PathParam("id") Long id){
+        return jobSeekerBean.findByUserId(id);
+    }
 }

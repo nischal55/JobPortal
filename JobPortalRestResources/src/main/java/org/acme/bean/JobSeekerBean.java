@@ -39,4 +39,13 @@ public class JobSeekerBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records found").build();
         }
     }
+
+    public Response findByUserId(Long id){
+        try{
+            JobSeekerDetail jobSeekerDetail = jobSeekerController.findByUserId(id);
+            return Response.status(Response.Status.ACCEPTED).entity(jobSeekerDetail).build();
+        }catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records found").build();
+        }
+    }
 }
