@@ -10,6 +10,7 @@ import JobProviderCreate from '@/pages/JobProviderCreate.vue'
 import JobCreateForm from '@/pages/JobCreateForm.vue'
 import JobDetailView from '@/pages/JobDetailView.vue'
 import MyApplication from '@/pages/MyApplication.vue'
+import AvailableJobList from '@/pages/AvailableJobList.vue'
 
 const routes = [
   {
@@ -63,6 +64,11 @@ const routes = [
     path: '/myApplications',
     name: 'myApplications',
     component : MyApplication
+  },
+  {
+    path: '/allJobs',
+    name: 'allJobs',
+    component : AvailableJobList
   }
 
 ]
