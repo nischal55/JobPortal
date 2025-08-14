@@ -40,4 +40,12 @@ public class JobApplicantController {
             return null;
         }
     }
+
+    public List<JobApplicants> findApplicantsByUserId(Long id){
+        try{
+            return jobApplicantfacade.findApplicantsByUserId(id);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

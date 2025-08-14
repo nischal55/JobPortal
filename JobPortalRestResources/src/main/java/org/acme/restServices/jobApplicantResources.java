@@ -27,9 +27,16 @@ public class jobApplicantResources {
         return jobApplicationBean.create(jobApplicants);
     }
 
-    @PUT
+    @GET
     @Path("/findById/{applicantId}")
     public Response findById(@PathParam("applicantId") Long applicantId){
         return jobApplicationBean.findById(applicantId);
     }
+
+    @GET
+    @Path("/findApplicantsByUserId/{userId}")
+    public Response findApplicantsByUserId(@PathParam("userId") Long userId){
+        return jobApplicationBean.findApplicantsByUserId(userId);
+    }
+
 }
