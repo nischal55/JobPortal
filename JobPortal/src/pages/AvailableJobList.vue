@@ -9,6 +9,8 @@ import Card from 'primevue/card';
 import Badge from 'primevue/badge';
 import Skeleton from 'primevue/skeleton';
 import Navbar from '@/components/navbar.vue';
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 const router = useRouter();
 const jobs = ref([]);
@@ -39,7 +41,12 @@ const fetchJobs = async () => {
   }
 };
 
-onMounted(fetchJobs);
+onMounted(() => {
+  if (route.query.q) {
+    searchKeyword.value = route.query.q
+  }
+  fetchJobs()
+})
 
 // Computed filtered jobs
 const filteredJobs = computed(() => {
@@ -99,7 +106,7 @@ const isDeadlineApproaching = (deadline) => {
   <Navbar/>
   <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
     <!-- Header Section -->
-    <div class="bg-emerald-600 shadow-sm border-b mb-5">
+    <div class="bg-emerald-600 shadow-sm border-b mb-10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div class="text-center">
           <h1 class="text-2xl font-bold text-gray-900 mb-2 text-white">Find Your Dream Job</h1>

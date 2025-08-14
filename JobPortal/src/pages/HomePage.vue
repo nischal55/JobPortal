@@ -35,7 +35,7 @@
             placeholder="Search for jobs..."
             class="w-full"
           />
-          <Button icon="pi pi-search" label="Search" @click="searchJobs" />
+          <Button icon="pi pi-search" @click="goToJobs" label="Search" />
         </div>
       </Transition>
     </div>
@@ -84,10 +84,7 @@ const searchQuery = ref('')
 const jobs = ref([])
 const ready = ref(false)
 
-function searchJobs() {
-  console.log('Searching for:', searchQuery.value)
-  // You can implement filtered API fetch here
-}
+const router = useRouter();
 
 function formatType(type) {
   switch (type) {
@@ -106,6 +103,11 @@ async function fetchJobs() {
   } catch (error) {
     console.error('Failed to fetch jobs:', error)
   }
+}
+
+function goToJobs() {
+  // Pass search query as URL parameter
+  router.push({ name: 'allJobs', query: { q: searchQuery.value } })
 }
 
 onMounted(() => {
