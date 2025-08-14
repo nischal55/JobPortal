@@ -83,8 +83,8 @@ const route = useRoute()
 const job = ref({})
 const relatedJobs = ref([])
 
-const seekerId = 1
-const resumeId = 2
+const seekerId = localStorage.getItem('jobseeker_id')
+const resumeId = localStorage.getItem('resume_detail_id')
 
 onMounted(() => {
   fetchJobDetails()

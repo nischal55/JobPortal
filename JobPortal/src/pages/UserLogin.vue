@@ -104,13 +104,33 @@ const login = async () => {
       throw new Error("Incomplete login response");
     }
 
+    // Store basic user info
     localStorage.setItem('user_id', id);
     localStorage.setItem('username', username);
     localStorage.setItem('user_role', role);
 
-    if (role === "admin") {
-      router.push({ name: 'dashboard' });
-    } else if (role === "provider") {
+    // Fetch and store resume_detail_id
+    try {
+      const resumeDetailRes = await ApiService.get(`/resumeDetail/findByUserId/${id}`);
+      if (resumeDetailRes.data?.id) {
+        localStorage.setItem('resume_detail_id', resumeDetailRes.data.id);
+      }
+    } catch (err) {
+      console.warn('Resume detail fetch failed:', err);
+    }
+
+    // Fetch and store jobseeker_id
+    try {
+      const jobSeekerRes = await ApiService.get(`/jobseeker/findByUserId/${id}`);
+      if (jobSeekerRes.data?.id) {
+        localStorage.setItem('jobseeker_id', jobSeekerRes.data.id);
+      }
+    } catch (err) {
+      console.warn('Job seeker fetch failed:', err);
+    }
+
+    // Redirect based on role
+    if (role === "admin" || role === "provider") {
       router.push({ name: 'dashboard' });
     } else {
       router.push({ name: 'home' });
@@ -128,8 +148,6 @@ const login = async () => {
     loading.value = false;
   }
 };
-
-
 
 </script>
 
