@@ -91,7 +91,8 @@ const router = useRouter()
 
 // Check if user is logged in
 const resumeId = localStorage.getItem('resume_detail_id')
-const isLoggedIn = !!resumeId
+const user_id = localStorage.getItem('user_id')
+const isLoggedIn = !!user_id
 
 function formatType(type) {
   switch (type) {

@@ -23,23 +23,23 @@
 
       <!-- Menu Items -->
       <nav class="flex-1 mt-4 flex flex-col space-y-1">
-        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors bg-green-600 text-green-100 font-semibold">
+        <a href="/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors bg-green-600 text-green-100 font-semibold">
           <i class="pi pi-home text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Dashboard</span>
         </a>
-        <a href="#" v-if="userRole === 'admin'" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+        <a href="jobProviderList" v-if="userRole === 'admin'" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-address-book text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Job Providers</span>
         </a>
-         <a href="#" v-if="userRole==='admin'" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+         <a href="jobseeker" v-if="userRole==='admin'" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-users text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Job Seekers</span>
         </a>
-        <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+        <a href="/jobList" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-briefcase text-lg"></i>
-          <span v-if="isOpen" class="whitespace-nowrap">Jobs Available</span>
+          <span v-if="isOpen" class="whitespace-nowrap">Posted Jobs</span>
         </a>
-          <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+          <a href="/applicants" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-list-check text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Jobs Applicants</span>
         </a>

@@ -12,6 +12,9 @@ import JobDetailView from '@/pages/JobDetailView.vue'
 import MyApplication from '@/pages/MyApplication.vue'
 import AvailableJobList from '@/pages/AvailableJobList.vue'
 import UpdateResume from '@/pages/UpdateResume.vue'
+import JobApplicantsList from '@/pages/JobApplicantsList.vue'
+import JobList from '@/pages/JobList.vue'
+import JobProviderList from '@/pages/JobProviderList.vue'
 
 const routes = [
   {
@@ -75,6 +78,21 @@ const routes = [
     path: '/updateResume',
     name: 'updateResume',
     component : UpdateResume
+  },
+  {
+    path: '/applicants',
+    name: 'applicants',
+    component : JobApplicantsList
+  },
+  {
+    path: '/jobList',
+    name: 'jobList',
+    component : JobList
+  },
+  {
+    path: '/jobProviderList',
+    name: 'jobProviderList',
+    component : JobProviderList
   }
 
 ]
@@ -84,8 +102,13 @@ const router = createRouter({
   routes,
 })
 
+const userId = localStorage.getItem('user_id')
+
 router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresAuth) {
+        if (!userId) {
+      return next({ name: 'userLogin' })
+    }
     try {
       await ApiService.get('/users/check')
       next()

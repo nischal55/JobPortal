@@ -45,4 +45,12 @@ public class JobDetailController {
             return null;
         }
     }
+
+    public List<JobDetail> findByProvider(Long id){
+        try{
+            return jobDetailFacade.findByProviderId(id);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

@@ -121,15 +121,6 @@ const updateApplication = (application) => {
                 </template>
             </Column>
 
-            <Column header="Actions" style="min-width: 12rem">
-                <template #body="{ data }">
-                    <div class="flex gap-2">
-                        <Button label="View" icon="pi pi-eye" outlined size="small" @click="viewApplication(data)" />
-                        <Button label="Update" icon="pi pi-pencil" severity="warning" size="small"
-                            @click="updateApplication(data)" />
-                    </div>
-                </template>
-            </Column>
         </DataTable>
     </div>
 </template>

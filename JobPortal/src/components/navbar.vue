@@ -20,7 +20,7 @@
           class="w-10 h-10 rounded-full cursor-pointer" />
         <div v-if="isDropdownOpen"
           class="absolute right-0 z-50 mt-2 w-48 bg-white border border-gray-200 rounded shadow-md">
-          <button @click="myApplication" class="block w-full px-4 py-2 text-left text-slate-600 hover:bg-gray-100 cursor-pointer">
+          <button @click="updateResume" class="block w-full px-4 py-2 text-left text-slate-600 hover:bg-gray-100 cursor-pointer">
             My Profile
           </button>
           <button @click="myApplication" class="block w-full px-4 py-2 text-left text-slate-600 hover:bg-gray-100 cursor-pointer">
@@ -83,7 +83,9 @@ const myApplication = () =>{
   router.push('/myApplications')
 }
 
-
+const updateResume = () =>{
+  router.push('/updateResume')
+}
 
 // Check login status on load
 onMounted(() => {

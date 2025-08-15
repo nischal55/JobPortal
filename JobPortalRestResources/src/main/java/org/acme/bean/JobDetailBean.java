@@ -50,4 +50,13 @@ public class JobDetailBean {
         }
 
     }
+
+    public Response findByProvider(Long id){
+        try{
+            List<JobDetail> jobDetailList = jobDetailController.findByProvider(id);
+            return Response.status(Response.Status.CREATED).entity(jobDetailList).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("No Records found").build();
+        }
+    }
 }

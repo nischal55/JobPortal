@@ -38,4 +38,10 @@ public class jobDetailResources {
         return jobDetailBean.recommendJobClient(id);
     }
 
+    @GET
+    @Path("/findByProvider/{id}")
+    public Response findByProvider(@PathParam("id") Long id){
+        return jobDetailBean.findByProvider(id);
+    }
+
 }

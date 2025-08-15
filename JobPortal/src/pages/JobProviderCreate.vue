@@ -54,6 +54,9 @@ import { ref } from 'vue'
 import Sidebar from '@/components/Sidebar.vue'
 import AdminNav from '@/components/AdminNav.vue'
 import ApiService from '@/services/ApiService'
+import { useRouter } from 'vue-router' 
+
+const router = useRouter();
 
 const form = ref({
   companyName: '',
@@ -78,8 +81,10 @@ const handleSubmit = async () => {
     }
 
     const response = await ApiService.post('/jobproviders/create', payload)
-    console.log('Success:', response.data)
-    alert('Job provider detail submitted successfully!')
+    router.push('/jobList') 
+    setTimeout(() => {
+      alert('Job provider detail submitted successfully!')
+    }, 100)
   } catch (error) {
     console.error('Error:', error)
     alert('Something went wrong while submitting.')

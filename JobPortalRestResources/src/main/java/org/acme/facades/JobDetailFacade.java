@@ -3,6 +3,7 @@ package org.acme.facades;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.acme.models.*;
 import org.jsoup.Jsoup;
 import java.util.*;
@@ -196,5 +197,15 @@ public class JobDetailFacade extends AbstractFacade<JobDetail> {
                 .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
                 .limit(10)
                 .forEach(e -> System.out.println(e.getKey() + " : " + e.getValue()));
+    }
+
+    public List<JobDetail> findByProviderId(Long providerId){
+        try{
+            TypedQuery<JobDetail> query = em.createQuery("\"Select c from JobDetail c where c.provider.id = :provider_id",JobDetail.class);
+            query.setParameter("provider_id",providerId);
+            return query.getResultList();
+        }catch (Exception e){
+            return null;
+        }
     }
 }

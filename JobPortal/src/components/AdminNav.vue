@@ -28,9 +28,7 @@
             id="profile-dropdown"
             class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 cursor-pointer"
           >
-            <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-emerald-600 hover:text-white">Profile</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-emerald-600 hover:text-white">Settings</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-emerald-600 hover:text-white">Logout</a>
+            <a href="/userLogin" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-emerald-600 hover:text-white">Logout</a>
           </div>
         </div>
       </nav>
