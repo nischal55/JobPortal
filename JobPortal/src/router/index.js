@@ -11,6 +11,7 @@ import JobCreateForm from '@/pages/JobCreateForm.vue'
 import JobDetailView from '@/pages/JobDetailView.vue'
 import MyApplication from '@/pages/MyApplication.vue'
 import AvailableJobList from '@/pages/AvailableJobList.vue'
+import UpdateResume from '@/pages/UpdateResume.vue'
 
 const routes = [
   {
@@ -69,6 +70,11 @@ const routes = [
     path: '/allJobs',
     name: 'allJobs',
     component : AvailableJobList
+  },
+  {
+    path: '/updateResume',
+    name: 'updateResume',
+    component : UpdateResume
   }
 
 ]

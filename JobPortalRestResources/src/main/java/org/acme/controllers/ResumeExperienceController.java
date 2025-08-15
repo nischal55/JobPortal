@@ -39,4 +39,12 @@ public class ResumeExperienceController {
             return null;
         }
     }
+
+    public List<ResumeExperience> findByResumeId(Long id){
+        try{
+            return resumeExperienceFacade.findResumeByResumeId(id);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

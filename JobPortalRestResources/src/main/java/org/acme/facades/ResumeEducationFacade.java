@@ -26,7 +26,7 @@ public class ResumeEducationFacade extends AbstractFacade<ResumeEducation> {
     public List<ResumeEducation> findResumeByResumeId(Long resumeId) {
         List<ResumeEducation> result = new ArrayList<>();
         try {
-            TypedQuery<ResumeEducation> query = em.createQuery("SELECT c from ResumeExperience c where c.resume.id = :resumeId", ResumeEducation.class);
+            TypedQuery<ResumeEducation> query = em.createQuery("SELECT c from ResumeEducation c where c.resume.id = :resumeId", ResumeEducation.class);
             query.setParameter("resumeId", resumeId);
             return result = query.getResultList();
         } catch (Exception e) {

@@ -27,9 +27,15 @@ public class resumeCertificationResources {
         return resumeCertificationBean.findAll();
     }
 
-    @PUT
+    @GET
     @Path("/findById/{id}")
     public Response findById(@PathParam("id") Long id){
         return resumeCertificationBean.findById(id);
+    }
+
+    @GET
+    @Path("/findByResumeId/{id}")
+    public Response findByResumeId(@PathParam("id") Long id){
+        return resumeCertificationBean.findByResumeId(id);
     }
 }

@@ -39,4 +39,13 @@ public class ResumeCertificationBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
         }
     }
+
+    public Response findByResumeId(Long id){
+        try{
+            List<ResumeCertification> resumeCertifications = resumeCertificationController.findByResumeId(id);
+            return Response.status(Response.Status.ACCEPTED).entity(resumeCertifications).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records Found").build();
+        }
+    }
 }

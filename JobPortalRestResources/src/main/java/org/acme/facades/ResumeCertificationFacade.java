@@ -26,7 +26,7 @@ public class ResumeCertificationFacade extends AbstractFacade<ResumeCertificatio
     public List<ResumeCertification> findResumeByResumeId(Long resumeId) {
         List<ResumeCertification> result = new ArrayList<>();
         try {
-            TypedQuery<ResumeCertification> query = em.createQuery("SELECT c from ResumeExperience c where c.resume.id = :resumeId", ResumeCertification.class);
+            TypedQuery<ResumeCertification> query = em.createQuery("SELECT c from ResumeCertification c where c.resume.id = :resumeId", ResumeCertification.class);
             query.setParameter("resumeId", resumeId);
             return result = query.getResultList();
         } catch (Exception e) {

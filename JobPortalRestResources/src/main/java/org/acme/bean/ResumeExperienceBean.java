@@ -39,4 +39,13 @@ public class ResumeExperienceBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
         }
     }
+
+    public Response findByResumeId(Long id){
+        try{
+            List<ResumeExperience> resumeExperiences = resumeExperienceController.findByResumeId(id);
+            return Response.status(Response.Status.ACCEPTED).entity(resumeExperiences).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records Found").build();
+        }
+    }
 }

@@ -43,7 +43,10 @@
 
   <!-- Job List Panel -->
   <div class="bg-gray-50 py-16 px-6 md:px-20">
-    <h2 class="text-3xl font-bold text-center mb-10">Recommended Job Openings</h2>
+
+    <h2 class="text-3xl font-bold text-center mb-10">
+      {{ isLoggedIn ? 'Recommended Job Openings' : 'Latest Job Openings' }}
+    </h2>
 
     <TransitionGroup name="p-slideup" tag="div" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div
@@ -84,7 +87,11 @@ const searchQuery = ref('')
 const jobs = ref([])
 const ready = ref(false)
 
-const router = useRouter();
+const router = useRouter()
+
+// Check if user is logged in
+const resumeId = localStorage.getItem('resume_detail_id')
+const isLoggedIn = !!resumeId
 
 function formatType(type) {
   switch (type) {
@@ -96,11 +103,14 @@ function formatType(type) {
   }
 }
 
-const resumeId = localStorage.getItem('resume_detail_id')
-
 async function fetchJobs() {
   try {
-    const response = await axios.get(`http://localhost:8888/jobDetail/recommend/${resumeId}`)
+    let response
+    if (isLoggedIn) {
+      response = await axios.get(`http://localhost:8888/jobDetail/recommend/${resumeId}`)
+    } else {
+      response = await axios.get('http://localhost:8888/jobDetail/findAll')
+    }
     jobs.value = response.data
   } catch (error) {
     console.error('Failed to fetch jobs:', error)

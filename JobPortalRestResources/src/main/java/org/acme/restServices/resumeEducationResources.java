@@ -33,4 +33,10 @@ public class resumeEducationResources {
         return resumeEducationBean.findById(id);
     }
 
+    @GET
+    @Path("/findByResumeId/{id}")
+    public Response findByResumeId(@PathParam("id") Long id){
+        return resumeEducationBean.findByResumeId(id);
+    }
+
 }

@@ -41,4 +41,13 @@ public class ResumeCertificationController {
             return null;
         }
     }
+
+    public List<ResumeCertification> findByResumeId(Long id) {
+        try {
+            return resumeCertificationFacade.findResumeByResumeId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

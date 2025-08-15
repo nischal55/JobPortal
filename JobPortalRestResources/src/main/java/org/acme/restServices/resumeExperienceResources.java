@@ -27,9 +27,16 @@ public class resumeExperienceResources {
         return resumeExperienceBean.findAll();
     }
 
-    @PUT
+    @GET
     @Path("/findById/{id}")
     public Response findById(@PathParam("id") Long id){
         return resumeExperienceBean.findById(id);
     }
+
+    @GET
+    @Path("/findByResumeId/{id}")
+    public Response findByResumeId(@PathParam("id") Long id){
+        return resumeExperienceBean.findByResumeId(id);
+    }
+
 }
