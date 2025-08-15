@@ -37,4 +37,12 @@ public class JobDetailController {
             return null;
         }
     }
+
+    public List<JobDetail> recommendJobsByResume(Long resumeId){
+        try{
+            return jobDetailFacade.recommendJobsByResume(resumeId);
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

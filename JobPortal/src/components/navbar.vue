@@ -12,8 +12,6 @@
         <router-link to="/" class="text-gray-700 hover:text-gray-900"> <i class="pi pi-home"></i> Home</router-link>
         <router-link to="/allJobs" class="text-gray-700 hover:text-gray-900"> <i class="pi pi-briefcase"></i>
           Jobs</router-link>
-        <router-link to="/contact" class="text-gray-700 hover:text-gray-900"> <i class="pi pi-envelope"></i>
-          Contact</router-link>
       </div>
 
       <!-- Authenticated User -->

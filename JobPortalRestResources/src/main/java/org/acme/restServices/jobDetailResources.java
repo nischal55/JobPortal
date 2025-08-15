@@ -16,20 +16,26 @@ public class jobDetailResources {
 
     @POST
     @Path("/create")
-    public Response create(JobDetail jobDetail){
+    public Response create(JobDetail jobDetail) {
         return jobDetailBean.createJob(jobDetail);
     }
 
     @GET
     @Path("/findAll")
-    public Response findAll(){
+    public Response findAll() {
         return jobDetailBean.findAllJob();
     }
 
     @GET
-     @Path("/findById/{id}")
-    public Response findById(@PathParam("id") Long id){
-    return jobDetailBean.findJobById(id);
+    @Path("/findById/{id}")
+    public Response findById(@PathParam("id") Long id) {
+        return jobDetailBean.findJobById(id);
+    }
+
+    @GET
+    @Path("/recommend/{id}")
+    public Response recommendJobClient(@PathParam("id") Long id){
+        return jobDetailBean.recommendJobClient(id);
     }
 
 }

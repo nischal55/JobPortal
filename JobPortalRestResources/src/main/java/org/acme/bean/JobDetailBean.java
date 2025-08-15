@@ -2,6 +2,7 @@ package org.acme.bean;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.core.Response;
 import org.acme.controllers.JobDetailController;
 import org.acme.models.JobDetail;
@@ -38,5 +39,15 @@ public class JobDetailBean {
         }catch(Exception e){
             return Response.status(Response.Status.BAD_REQUEST).entity("No Records found").build();
         }
+    }
+
+    public Response recommendJobClient(Long id){
+        try{
+            List<JobDetail> jobDetailList = jobDetailController.recommendJobsByResume(id);
+            return Response.status(Response.Status.CREATED).entity(jobDetailList).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("No Records found").build();
+        }
+
     }
 }
