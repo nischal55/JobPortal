@@ -59,4 +59,22 @@ public class JobDetailBean {
             return Response.status(Response.Status.BAD_REQUEST).entity("No Records found").build();
         }
     }
+
+    public Response updateJob(JobDetail jobDetail){
+        try{
+            jobDetailController.updateJob(jobDetail);
+            return Response.status(Response.Status.ACCEPTED).entity(jobDetail).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Failed to update").build();
+        }
+    }
+
+    public Response deleteJob(JobDetail jobDetail){
+        try{
+            jobDetailController.deleteJob(jobDetail);
+            return Response.status(Response.Status.ACCEPTED).entity(jobDetail).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Failed to delete").build();
+        }
+    }
 }

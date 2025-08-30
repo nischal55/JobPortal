@@ -204,7 +204,7 @@ public class JobDetailFacade extends AbstractFacade<JobDetail> {
 
     public List<JobDetail> findByProviderId(Long providerId){
         try{
-            TypedQuery<JobDetail> query = em.createQuery("\"Select c from JobDetail c where c.provider.user.id = :provider_id",JobDetail.class);
+            TypedQuery<JobDetail> query = em.createQuery("Select c from JobDetail c where c.provider.id = :provider_id",JobDetail.class);
             query.setParameter("provider_id",providerId);
             return query.getResultList();
         }catch (Exception e){

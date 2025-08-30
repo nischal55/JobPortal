@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.bean.JobDetailBean;
+import org.acme.controllers.JobDetailController;
 import org.acme.models.JobDetail;
 
 @Path("/jobDetail")
@@ -13,6 +14,9 @@ import org.acme.models.JobDetail;
 public class jobDetailResources {
     @Inject
     JobDetailBean jobDetailBean;
+
+    @Inject
+    JobDetailController jobDetailController;
 
     @POST
     @Path("/create")
@@ -44,4 +48,16 @@ public class jobDetailResources {
         return jobDetailBean.findByProvider(id);
     }
 
+    @PUT
+    @Path("/updateJobDetail")
+    public Response updateJobDetail(JobDetail jobDetail){
+        return jobDetailBean.updateJob(jobDetail);
+    }
+
+    @DELETE
+    @Path("/delete/{id}")
+    public Response deleteJob(@PathParam("id") Long id){
+        JobDetail jobDetail = jobDetailController.findById(id);
+        return jobDetailBean.deleteJob(jobDetail);
+    }
 }
