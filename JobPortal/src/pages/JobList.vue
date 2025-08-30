@@ -8,12 +8,12 @@
         <div class="card rounded">
           <div class="flex justify-between items-center mb-4">
             <div class="text-slate-600 text-lg font-semibold p-2">Job List</div>
-            <Button label="Add Job" icon="pi pi-plus" class="p-button-sm p-button-success" @click="openAddJob" />
+            <Button label="Add Job" icon="pi pi-plus" class="p-button-sm" @click="openAddJob" />
           </div>
 
           <DataTable :value="jobs" v-model:filters="filters" dataKey="id" paginator :rows="10" :loading="loading"
             showGridlines filterDisplay="menu" :globalFilterFields="[
-              'title','provider.username','type','location','salaryRange','description','requirements'
+              'title', 'provider.username', 'type', 'location', 'salaryRange', 'description', 'requirements'
             ]" class="text-sm">
             <template #header>
               <div class="flex justify-between items-center">
@@ -30,19 +30,28 @@
 
             <Column header="S.N"><template #body="{ index }">{{ index + 1 }}</template></Column>
             <Column field="title" header="Job Title"><template #body="{ data }">{{ data.title }}</template></Column>
-            <Column field="provider.username" header="Provider"><template #body="{ data }">{{ data.provider?.username || 'N/A' }}</template></Column>
+            <Column field="provider.username" header="Provider"><template #body="{ data }">{{ data.provider?.username ||
+                'N/A' }}</template></Column>
             <Column field="type" header="Type"><template #body="{ data }">{{ data.type }}</template></Column>
-            <Column field="location" header="Location"><template #body="{ data }">{{ data.location }}</template></Column>
-            <Column field="salaryRange" header="Salary"><template #body="{ data }">{{ data.salaryRange }}</template></Column>
-            <Column field="deadline" header="Deadline"><template #body="{ data }">{{ formatDate(data.deadline) }}</template></Column>
-            <Column field="createdAt" header="Created At"><template #body="{ data }">{{ formatDateTime(data.createdAt) }}</template></Column>
+            <Column field="location" header="Location"><template #body="{ data }">{{ data.location }}</template>
+            </Column>
+            <Column field="salaryRange" header="Salary"><template #body="{ data }">{{ data.salaryRange }}</template>
+            </Column>
+            <Column field="deadline" header="Deadline"><template #body="{ data }">{{ formatDate(data.deadline)
+                }}</template>
+            </Column>
+            <Column field="createdAt" header="Created At"><template #body="{ data }">{{ formatDateTime(data.createdAt)
+                }}</template>
+            </Column>
 
             <Column field="Action" header="Action">
               <template #body="{ data }">
                 <div class="flex gap-2">
                   <Button icon="pi pi-eye" class="p-button-sm" title="View Applicants" @click="openDialog(data)" />
-                  <Button icon="pi pi-pencil" class="p-button-sm p-button-warning" title="Edit Job" @click="openEditDialog(data)" />
-                  <Button icon="pi pi-trash" class="p-button-sm p-button-danger" title="Delete Job" @click="confirmDelete(data)" />
+                  <Button icon="pi pi-pencil" class="p-button-sm p-button-warning" title="Edit Job"
+                    @click="openEditDialog(data)" />
+                  <Button icon="pi pi-trash" class="p-button-sm p-button-danger" title="Delete Job"
+                    @click="confirmDelete(data)" />
                 </div>
               </template>
             </Column>
@@ -63,11 +72,16 @@
 
     <!-- Job Info -->
     <div class="flex flex-col gap-3 mb-4">
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Title</label><span>{{ selectedJob?.title }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Type</label><span>{{ selectedJob?.type }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Location</label><span>{{ selectedJob?.location }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Salary</label><span>{{ selectedJob?.salaryRange }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Deadline</label><span>{{ formatDate(selectedJob?.deadline) }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Title</label><span>{{ selectedJob?.title
+          }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Type</label><span>{{ selectedJob?.type
+          }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Location</label><span>{{
+        selectedJob?.location }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Salary</label><span>{{
+        selectedJob?.salaryRange }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Deadline</label><span>{{
+        formatDate(selectedJob?.deadline) }}</span></div>
     </div>
 
     <!-- Applicants List -->
@@ -76,10 +90,18 @@
       <template #empty>No applicants found.</template>
       <Column header="S.N"><template #body="{ index }">{{ index + 1 }}</template></Column>
       <Column field="name" header="Name"><template #body="{ data }">{{ data.seeker.user.username }}</template></Column>
-      <Column field="appliedAt" header="Applied On"><template #body="{ data }">{{ formatDateTime(data.appliedAt) }}</template></Column>
+      <Column field="appliedAt" header="Applied On"><template #body="{ data }">{{ formatDateTime(data.appliedAt)
+          }}</template></Column>
       <Column field="status" header="Status">
         <template #body="{ data }">
           <Tag :value="data.status" :severity="data.status === 'Pending' ? 'warn' : 'success'" />
+        </template>
+      </Column>
+      <Column field="Action" header="Action">
+        <template #body="{ data }">
+          <div class="flex gap-2">
+            <Button icon="pi pi-eye" class="p-button-sm" title="View Applicant Detail" @click="openDialog(data)" />
+          </div>
         </template>
       </Column>
     </DataTable>
@@ -92,13 +114,26 @@
   <!-- Dialog: Edit Job -->
   <Dialog v-model:visible="editDialogVisible" modal header="Edit Job" :style="{ width: '50rem' }">
     <div class="space-y-4">
-      <div><label class="block mb-1">Title</label><InputText v-model="editingJob.title" class="w-full" /></div>
-      <div><label class="block mb-1">Description</label><Editor v-model="editingJob.description" class="w-full" editorStyle="height: 150px" /></div>
-      <div><label class="block mb-1">Location</label><InputText v-model="editingJob.location" class="w-full" /></div>
-      <div><label class="block mb-1">Salary</label><InputText v-model="editingJob.salaryRange" class="w-full" /></div>
-      <div><label class="block mb-1">Job Type</label><Dropdown v-model="editingJob.type" :options="types" class="w-full" /></div>
-      <div><label class="block mb-1">Requirements</label><Editor v-model="editingJob.requirements" class="w-full" editorStyle="height: 150px" /></div>
-      <div><label class="block mb-1">Deadline</label><input type="date" v-model="editingJob.deadline" class="w-full border rounded px-3 py-2" /></div>
+      <div><label class="block mb-1">Title</label>
+        <InputText v-model="editingJob.title" class="w-full" />
+      </div>
+      <div><label class="block mb-1">Description</label>
+        <Editor v-model="editingJob.description" class="w-full" editorStyle="height: 150px" />
+      </div>
+      <div><label class="block mb-1">Location</label>
+        <InputText v-model="editingJob.location" class="w-full" />
+      </div>
+      <div><label class="block mb-1">Salary</label>
+        <InputText v-model="editingJob.salaryRange" class="w-full" />
+      </div>
+      <div><label class="block mb-1">Job Type</label>
+        <Dropdown v-model="editingJob.type" :options="types" class="w-full" />
+      </div>
+      <div><label class="block mb-1">Requirements</label>
+        <Editor v-model="editingJob.requirements" class="w-full" editorStyle="height: 150px" />
+      </div>
+      <div><label class="block mb-1">Deadline</label><input type="date" v-model="editingJob.deadline"
+          class="w-full border rounded px-3 py-2" /></div>
     </div>
     <template #footer>
       <Button label="Cancel" class="p-button-text" @click="editDialogVisible = false" />
@@ -221,7 +256,7 @@ const updateJob = async () => {
 }
 
 const confirmDelete = job => {
-  jobToDelete.value = {...job}
+  jobToDelete.value = { ...job }
   deleteDialogVisible.value = true
 }
 

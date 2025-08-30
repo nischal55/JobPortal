@@ -4,71 +4,72 @@
         <div class="flex-1 flex flex-col w-[69%]">
             <AdminNav />
             <main class="flex-1 p-3 overflow-auto">
-                    <div class="text-left text-slate-600 text-lg font-semibold p-5">
-                        Job Provider
-                    </div>
-                    <DataTable :value="providers" v-model:filters="filters" dataKey="id" paginator :rows="10"
-                        :loading="loading" showGridlines filterDisplay="menu" :globalFilterFields="[
-                            'user.username',
-                            'companyName',
-                            'website',
-                            'contactNo',
-                            'contactEmail',
-                            'description'
-                        ]" class="text-sm">
-                        <template #header>
-                            <div class="flex justify-between items-center">
-                                <Button icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter" />
-                                <IconField>
-                                    <InputIcon><i class="pi pi-search" /></InputIcon>
-                                    <InputText v-model="filters.global.value" placeholder="Keyword Search" />
-                                </IconField>
+                <div class="text-left text-slate-600 text-lg font-semibold p-5">
+                    Job Provider
+                </div>
+                <DataTable :value="providers" v-model:filters="filters" dataKey="id" paginator :rows="10"
+                    :loading="loading" showGridlines filterDisplay="menu" :globalFilterFields="[
+                        'user.username',
+                        'companyName',
+                        'website',
+                        'contactNo',
+                        'contactEmail',
+                        'description'
+                    ]" class="text-sm">
+                    <template #header>
+                        <div class="flex justify-between items-center">
+                            <Button icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter" />
+                            <IconField>
+                                <InputIcon><i class="pi pi-search" /></InputIcon>
+                                <InputText v-model="filters.global.value" placeholder="Keyword Search" />
+                            </IconField>
+                        </div>
+                    </template>
+
+                    <template #empty>No providers found.</template>
+                    <template #loading>Loading providers. Please wait.</template>
+
+                    <Column header="S.N">
+                        <template #body="{ index }">{{ index + 1 }}</template>
+                    </Column>
+
+                    <Column field="user.username" header="Username" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.user?.username }}</template>
+                        <template #filter="{ filterModel }">
+                            <InputText v-model="filterModel.value" placeholder="Search username" class="text-sm" />
+                        </template>
+                    </Column>
+
+                    <Column field="companyName" header="Company Name" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.companyName }}</template>
+                        <template #filter="{ filterModel }">
+                            <InputText v-model="filterModel.value" placeholder="Search company" class="text-sm" />
+                        </template>
+                    </Column>
+
+                    <Column field="website" header="Website" style="min-width: 12rem">
+                        <template #body="{ data }">
+                            <a v-if="data.website" :href="data.website" target="_blank"
+                                class="text-blue-500 underline">{{ data.website }}</a>
+                        </template>
+                        <template #filter="{ filterModel }">
+                            <InputText v-model="filterModel.value" placeholder="Search website" class="text-sm" />
+                        </template>
+                    </Column>
+
+                    <Column field="contactNo" header="Contact No" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.contactNo }}</template>
+                    </Column>
+
+                    <Column field="Action" header="Action">
+                        <template #body="{ data }">
+                            <div class="flex gap-2">
+                                <Button icon="pi pi-eye" class="p-button-sm" title="View Provider's Detail" />
+                                <Button icon="pi pi-ban" class="p-button-sm p-button-danger" title="Block Provider" />
                             </div>
                         </template>
-
-                        <template #empty>No providers found.</template>
-                        <template #loading>Loading providers. Please wait.</template>
-
-                        <Column header="S.N">
-                            <template #body="{ index }">{{ index + 1 }}</template>
-                        </Column>
-
-                        <Column field="user.username" header="Username" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.user?.username }}</template>
-                            <template #filter="{ filterModel }">
-                                <InputText v-model="filterModel.value" placeholder="Search username" class="text-sm" />
-                            </template>
-                        </Column>
-
-                        <Column field="companyName" header="Company Name" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.companyName }}</template>
-                            <template #filter="{ filterModel }">
-                                <InputText v-model="filterModel.value" placeholder="Search company" class="text-sm" />
-                            </template>
-                        </Column>
-
-                        <Column field="website" header="Website" style="min-width: 12rem">
-                            <template #body="{ data }">
-                                <a v-if="data.website" :href="data.website" target="_blank"
-                                    class="text-blue-500 underline">{{ data.website }}</a>
-                            </template>
-                            <template #filter="{ filterModel }">
-                                <InputText v-model="filterModel.value" placeholder="Search website" class="text-sm" />
-                            </template>
-                        </Column>
-
-                        <Column field="contactNo" header="Contact No" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.contactNo }}</template>
-                        </Column>
-
-                        <Column field="contactEmail" header="Contact Email" style="min-width: 14rem">
-                            <template #body="{ data }">{{ data.contactEmail }}</template>
-                        </Column>
-
-                        <Column field="description" header="Description" style="min-width: 14rem">
-                            <template #body="{ data }">{{ data.description }}</template>
-                        </Column>
-                    </DataTable>
+                    </Column>
+                </DataTable>
             </main>
         </div>
     </div>

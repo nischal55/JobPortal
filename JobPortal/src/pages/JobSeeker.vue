@@ -84,39 +84,26 @@ const clearFilter = () => {
 
           <Column field="user.username" header="Name" style="min-width: 12rem">
             <template #body="{ data }">{{ data.user?.username }}</template>
-            <template #filter="{ filterModel }">
-              <InputText v-model="filterModel.value" placeholder="Search by name" class="text-sm" />
-            </template>
           </Column>
 
           <Column field="contactNo" header="Contact No" style="min-width: 10rem">
             <template #body="{ data }">{{ data.contactNo }}</template>
-            <template #filter="{ filterModel }">
-              <InputText v-model="filterModel.value" placeholder="Search contact no" class="text-sm" />
-            </template>
           </Column>
 
           <Column field="address" header="Address" style="min-width: 12rem">
             <template #body="{ data }">{{ data.address }}</template>
-            <template #filter="{ filterModel }">
-              <InputText v-model="filterModel.value" placeholder="Search by address" class="text-sm" />
-            </template>
-          </Column>
-
-          <Column field="skills" header="Skills" style="min-width: 12rem">
-            <template #body="{ data }">{{ data.skills }}</template>
-            <template #filter="{ filterModel }">
-              <InputText v-model="filterModel.value" placeholder="Search by skills" class="text-sm" />
-            </template>
           </Column>
 
           <Column field="summary" header="Summary" style="min-width: 14rem">
             <template #body="{ data }">{{ data.summary }}</template>
           </Column>
 
-          <Column field="linkedIn" header="LinkedIn" style="min-width: 12rem">
+          <Column field="Action" header="Action">
             <template #body="{ data }">
-              <a :href="data.linkedIn" class="text-blue-500 underline" target="_blank">{{ data.linkedIn }}</a>
+              <div class="flex gap-2">
+                <Button icon="pi pi-eye" class="p-button-sm" title="View Job Seeker's Detail" />
+                <Button icon="pi pi-ban" class="p-button-sm p-button-danger" title="Block Provider" />
+              </div>
             </template>
           </Column>
         </DataTable>
