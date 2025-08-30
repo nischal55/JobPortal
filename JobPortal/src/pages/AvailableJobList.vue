@@ -67,7 +67,7 @@ const filteredJobs = computed(() => {
 
 // View job details
 const viewJobDetails = (job) => {
-  router.push({ name: 'job-view', params: { id: job.id } });
+  router.push({ name: 'jobDetail', params: { id: job.id } });
 };
 
 const clearFilters = () => {
@@ -230,7 +230,7 @@ const isDeadlineApproaching = (deadline) => {
               <Card 
                 v-for="job in filteredJobs" 
                 :key="job.id" 
-                class="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border-l-4 border-l-blue-500"
+                class="group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border-l-4 border-l-emerald-600"
                 @click="viewJobDetails(job)"
               >
                 <template #content>
@@ -238,7 +238,7 @@ const isDeadlineApproaching = (deadline) => {
                     <!-- Header -->
                     <div class="flex justify-between items-start mb-4">
                       <div class="flex-1">
-                        <h3 class="font-bold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                        <h3 class="font-bold text-lg text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors line-clamp-2">
                           {{ job.title }}
                         </h3>
                         <p class="text-gray-600 font-medium">
@@ -261,7 +261,7 @@ const isDeadlineApproaching = (deadline) => {
                       </div>
                       
                       <div class="flex items-center text-gray-600">
-                        <i class="pi pi-dollar mr-2 text-gray-400"></i>
+                        NPR .
                         <span class="text-sm font-medium">
                           {{ job.salaryRange || 'Salary not disclosed' }}
                         </span>

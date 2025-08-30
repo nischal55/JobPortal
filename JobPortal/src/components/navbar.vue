@@ -75,6 +75,8 @@ const logout = () => {
   localStorage.removeItem('user_role')
   localStorage.removeItem('username')
   localStorage.removeItem('user_id')
+  localStorage.removeItem('jobseeker_id')
+  localStorage.removeItem('resume_detail_id')
   isLoggedIn.value = false
   router.push('/userLogin')
 }

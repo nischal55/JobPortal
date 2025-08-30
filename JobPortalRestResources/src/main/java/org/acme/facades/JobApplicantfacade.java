@@ -36,4 +36,16 @@ public class JobApplicantfacade extends AbstractFacade<JobApplicants>{
             return jobApplicants;
         }
     }
+
+    public List<JobApplicants> findApplicantsByJobId(Long id){
+        List<JobApplicants> jobApplicants = new ArrayList<>();
+        try{
+            TypedQuery<JobApplicants> query = em.createQuery("Select c from JobApplicants c where c.job.id = :jobId", JobApplicants.class);
+            query.setParameter("jobId",id);
+            jobApplicants = query.getResultList();
+            return  jobApplicants;
+        }catch (Exception e){
+            return jobApplicants;
+        }
+    }
 }

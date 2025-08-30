@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.acme.facades.JobApplicantfacade;
 import org.acme.models.JobApplicants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -46,6 +47,16 @@ public class JobApplicantController {
             return jobApplicantfacade.findApplicantsByUserId(id);
         }catch (Exception e){
             return null;
+        }
+    }
+
+    public List<JobApplicants> findApplicantsByJobId(Long id){
+        List<JobApplicants> jobApplicants = new ArrayList<>();
+        try{
+            jobApplicants = jobApplicantfacade.findApplicantsByJobId(id);
+            return jobApplicants;
+        }catch (Exception e){
+            return  jobApplicants;
         }
     }
 }

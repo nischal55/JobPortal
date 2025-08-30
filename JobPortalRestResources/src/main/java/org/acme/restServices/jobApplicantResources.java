@@ -39,4 +39,10 @@ public class jobApplicantResources {
         return jobApplicationBean.findApplicantsByUserId(userId);
     }
 
+    @GET
+    @Path("/findApplicantsByJobId/{id}")
+    public Response findApplicantsByJobId(@PathParam("id") Long jobId){
+        return jobApplicationBean.findApplicantsByJobId(jobId);
+    }
+
 }

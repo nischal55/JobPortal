@@ -57,7 +57,8 @@ const routes = [
   {
     path: '/jobCreateForm',
     name: 'jobCreateForm',
-    component : JobCreateForm
+    component : JobCreateForm,
+    meta: { requiresAuth: true },
   },
   {
     path: '/jobDetail/:id',
@@ -67,7 +68,8 @@ const routes = [
   {
     path: '/myApplications',
     name: 'myApplications',
-    component : MyApplication
+    component : MyApplication,
+    meta: { requiresAuth: true },
   },
   {
     path: '/allJobs',
@@ -77,22 +79,26 @@ const routes = [
   {
     path: '/updateResume',
     name: 'updateResume',
-    component : UpdateResume
+    component : UpdateResume,
+    meta: { requiresAuth: true },
   },
   {
     path: '/applicants',
     name: 'applicants',
-    component : JobApplicantsList
+    component : JobApplicantsList,
+    meta: { requiresAuth: true },
   },
   {
     path: '/jobList',
     name: 'jobList',
-    component : JobList
+    component : JobList,
+    meta: { requiresAuth: true },
   },
   {
     path: '/jobProviderList',
     name: 'jobProviderList',
-    component : JobProviderList
+    component : JobProviderList,
+    meta: { requiresAuth: true },
   }
 
 ]

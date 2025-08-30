@@ -1,123 +1,163 @@
 <template>
     <div class="flex h-screen">
         <Sidebar />
-        <div class="flex-1 flex flex-col w-[69%]">
+        <div class="flex-1 flex flex-col w-[69%] pb-10">
             <AdminNav />
-            <div class="bg-surface-50 dark:bg-surface-950 px-6 py-8 md:px-12 lg:px-20">
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
 
-                    <!-- Job Providers -->
-                    <div class="bg-surface-0 dark:bg-surface-900 shadow-sm p-5 rounded-2xl">
-                        <div class="flex justify-between gap-4">
-                            <div class="flex flex-col gap-2">
-                                <span class="text-surface-700 dark:text-surface-300 font-normal leading-tight">Job Providers</span>
-                                <div class="text-surface-900 dark:text-surface-0 font-semibold !text-2xl !leading-tight">
-                                    {{ counts.providers }}
-                                </div>
+            <main class="bg-gray-50 dark:bg-surface-950 p-6 overflow-auto">
+                <!-- Top Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div v-for="card in statsCards" :key="card.title"
+                        class="bg-white dark:bg-surface-900 p-5 rounded-xl shadow-md flex flex-col">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-500 text-sm">{{ card.title }}</p>
+                                <h2 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                                    {{ card.value }}
+                                </h2>
                             </div>
-                            <div class="flex items-center text-emerald-600 justify-center rounded-lg w-10 h-10">
-                                <i class="pi pi-address-book text-surface-0 dark:text-surface-900 !text-xl !leading-none" />
+                            <div
+                                class="w-10 h-10 flex items-center justify-center rounded-lg bg-emerald-100 text-emerald-600">
+                                <i :class="card.icon" />
                             </div>
                         </div>
-                        <div class="mt-4">
-                            <span class="text-surface-600 dark:text-surface-300 font-medium leading-tight">24 new</span>
-                            <span class="text-surface-500 dark:text-surface-300 leading-tight"> since last visit</span>
-                        </div>
+                        <p class="mt-2 text-xs" :class="card.trend > 0 ? 'text-emerald-600' : 'text-red-500'">
+                            {{ card.trend > 0 ? '+' : '' }}{{ card.trend }}% Since last week
+                        </p>
                     </div>
-
-                    <!-- Job Seekers -->
-                    <div class="bg-surface-0 dark:bg-surface-900 shadow-sm p-5 rounded-2xl">
-                        <div class="flex justify-between gap-4">
-                            <div class="flex flex-col gap-2">
-                                <span class="text-surface-700 dark:text-surface-300 font-normal leading-tight">Job Seekers</span>
-                                <div class="text-surface-900 dark:text-surface-0 font-semibold !text-2xl !leading-tight">
-                                    {{ counts.seekers }}
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-center text-emerald-600 rounded-lg w-10 h-10">
-                                <i class="pi pi-users text-surface-0 dark:text-surface-900 !text-xl !leading-none" />
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <span class="text-surface-600 dark:text-surface-300 font-medium leading-tight">48 new</span>
-                            <span class="text-surface-500 dark:text-surface-300 leading-tight"> since last visit</span>
-                        </div>
-                    </div>
-
-                    <!-- Applicants -->
-                    <div class="bg-surface-0 dark:bg-surface-900 shadow-sm p-5 rounded-2xl">
-                        <div class="flex justify-between gap-4">
-                            <div class="flex flex-col gap-2">
-                                <span class="text-surface-700 dark:text-surface-300 font-normal leading-tight">Applicants</span>
-                                <div class="text-surface-900 dark:text-surface-0 font-semibold !text-2xl !leading-tight">
-                                    {{ counts.applicants }}
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-center text-emerald-600 rounded-lg w-10 h-10">
-                                <i class="pi pi-list-check text-surface-0 dark:text-surface-900 !text-xl !leading-none" />
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <span class="text-surface-500 dark:text-surface-300 leading-tight">32,56 / 250 GB</span>
-                        </div>
-                    </div>
-
-                    <!-- Job Posted -->
-                    <div class="bg-surface-0 dark:bg-surface-900 shadow-sm p-5 rounded-2xl">
-                        <div class="flex justify-between gap-4">
-                            <div class="flex flex-col gap-2">
-                                <span class="text-surface-700 dark:text-surface-300 font-normal leading-tight">Job Posted</span>
-                                <div class="text-surface-900 dark:text-surface-0 font-semibold !text-2xl !leading-tight">
-                                    {{ counts.jobs }}
-                                </div>
-                            </div>
-                            <div class="flex items-center justify-center text-emerald-600 rounded-lg w-10 h-10">
-                                <i class="pi pi-briefcase text-surface-0 dark:text-surface-900 !text-xl !leading-none" />
-                            </div>
-                        </div>
-                        <div class="mt-4">
-                            <span class="text-surface-600 dark:text-surface-300 font-medium leading-tight">72 new</span>
-                            <span class="text-surface-500 dark:text-surface-300 leading-tight"> user this week</span>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
+
+                <!-- Middle Section -->
+                <div class="grid grid-cols-1 lg:grid-cols-6 gap-6 mb-6">
+                    <!-- Application Stats -->
+                    <div class="bg-white dark:bg-surface-900 p-6 lg:col-span-2 rounded-xl shadow-md">
+                        <h3 class="text-gray-700 dark:text-gray-200 font-medium mb-4">Application Statistics</h3>
+                        <div class="h-72"> <!-- 👈 control height -->
+                            <DoughnutChart :data="applicationChartData" :options="chartOptions" />
+                        </div>
+                    </div>
+
+                    <!-- Job Posting Analytics -->
+                    <div class="bg-white dark:bg-surface-900 p-6 lg:col-span-4 rounded-xl shadow-md">
+                        <h3 class="text-gray-700 dark:text-gray-200 font-medium mb-4">Job Posting Analytics</h3>
+                        <LineChart :data="jobChartData" :options="chartOptions" />
+                    </div>
+                </div>
+            </main>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import AdminNav from '@/components/AdminNav.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import ApiService from '@/services/ApiService' // your axios wrapper
 
-const counts = ref({
-    providers: 0,
-    seekers: 0,
-    applicants: 0,
-    jobs: 0
+import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale
+} from 'chart.js'
+import { Doughnut, Line } from 'vue-chartjs'
+
+ChartJS.register(
+    Title,
+    Tooltip,
+    Legend,
+    ArcElement,
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale
+)
+
+// Chart Components
+const DoughnutChart = Doughnut
+const LineChart = Line
+
+// Top Stats Cards
+const statsCards = ref([
+    { title: 'Job Providers', value: '245', trend: 5.2, icon: 'pi pi-address-book' },
+    { title: 'Job Seekers', value: '1,456', trend: 8.4, icon: 'pi pi-users' },
+    { title: 'Applicants', value: '890', trend: 3.1, icon: 'pi pi-list-check' },
+    { title: 'Jobs Posted', value: '320', trend: 6.7, icon: 'pi pi-briefcase' },
+])
+
+// ✅ Make chart data reactive
+const applicationChartData = ref({
+    labels: ['Accepted', 'Pending', 'Rejected'],
+    datasets: [
+        {
+            data: [320, 420, 150],
+            backgroundColor: ['#10b981', '#facc15', '#ef4444'],
+            hoverOffset: 8,
+        },
+    ],
 })
 
-const fetchCounts = async () => {
-    try {
-        const [providersRes, seekersRes, applicantsRes, jobsRes] = await Promise.all([
-            ApiService.get('/jobproviders/findAll'),
-            ApiService.get('/jobseeker/findAll'),
-            ApiService.get('/jobApplicants/findAll'),
-            ApiService.get('/jobDetail/findAll')
-        ])
+const jobChartData = ref({
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+    datasets: [
+        {
+            label: 'Jobs Posted',
+            data: [30, 50, 45, 70, 60, 80, 65, 90],
+            borderColor: '#039e27',
+            backgroundColor: '#039e27',
+            fill: true,
+            tension: 0.3,
+        },
+    ],
+})
 
-        counts.value.providers = providersRes.data.length
-        counts.value.seekers = seekersRes.data.length
-        counts.value.applicants = applicantsRes.data.length
-        counts.value.jobs = jobsRes.data.length
+const chartOptions = ref({
+    responsive: true,
+    plugins: {
+        legend: {
+            position: 'bottom',
+            labels: { color: '#6b7280' },
+        },
+    },
+    scales: {
+        x: { ticks: { color: '#6b7280' } },
+        y: { ticks: { color: '#6b7280' } },
+    },
+})
 
-    } catch (error) {
-        console.error('Error fetching counts:', error)
-    }
-}
-
-onMounted(fetchCounts)
+// Applications
+const applications = ref([
+    {
+        name: 'John Doe',
+        avatar: 'https://i.pravatar.cc/30?u=john',
+        job: 'Frontend Developer',
+        date: '21/07/2022 08:21',
+        status: 'Accepted',
+    },
+    {
+        name: 'Jane Smith',
+        avatar: 'https://i.pravatar.cc/30?u=jane',
+        job: 'UI/UX Designer',
+        date: '22/07/2022 10:15',
+        status: 'Pending',
+    },
+    {
+        name: 'Alex Johnson',
+        avatar: 'https://i.pravatar.cc/30?u=alex',
+        job: 'Backend Developer',
+        date: '23/07/2022 11:00',
+        status: 'Rejected',
+    },
+    {
+        name: 'Emily Brown',
+        avatar: 'https://i.pravatar.cc/30?u=emily',
+        job: 'Project Manager',
+        date: '23/07/2022 12:45',
+        status: 'Pending',
+    },
+])
 </script>

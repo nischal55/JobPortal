@@ -149,7 +149,7 @@
             </div>
             <div class="flex pt-6 justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('3')" />
-              <Button label="Update" icon="pi pi-check" iconPos="right" @click="updateResume" />
+              <!-- <Button label="Update" icon="pi pi-check" iconPos="right" @click="updateResume" /> -->
             </div>
           </div>
         </StepPanel>

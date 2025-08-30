@@ -4,8 +4,7 @@
         <div class="flex-1 flex flex-col w-[69%]">
             <AdminNav />
             <main class="flex-1 p-3 overflow-auto">
-                <div class="card">
-                    <div class="text-center text-slate-600 text-lg font-semibold p-5">
+                    <div class="text-left text-slate-600 text-lg font-semibold p-5">
                         Job Provider
                     </div>
                     <DataTable :value="providers" v-model:filters="filters" dataKey="id" paginator :rows="10"
@@ -70,7 +69,6 @@
                             <template #body="{ data }">{{ data.description }}</template>
                         </Column>
                     </DataTable>
-                </div>
             </main>
         </div>
     </div>

@@ -52,7 +52,7 @@
           >
             <router-link 
               :to="`/jobDetail/${related.id}`" 
-              class="text-blue-600 font-medium hover:underline"
+              class="text-emerald-600 font-medium hover:underline"
             >
               {{ related.title }}
             </router-link>

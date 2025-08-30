@@ -20,7 +20,7 @@
           </div>
           <div class="text-center w-full">
             <span class="text-gray-600 dark:text-gray-300 leading-normal">Don't have an account?</span>
-            <a class="text-blue-600 font-medium ml-1 cursor-pointer hover:text-blue-700">Create today!</a>
+            <a class="text-blue-600 font-medium ml-1 cursor-pointer hover:text-blue-700" href="/registration">Create today!</a>
           </div>
         </div>
       </div>
@@ -49,7 +49,6 @@
         <div
           class="flex flex-col sm:flex-row items-start sm:items-center justify-end w-full gap-3 sm:gap-0"
         >
-          <a class="text-blue-600 font-medium cursor-pointer hover:text-blue-700">Forgot your password?</a>
         </div>
       </div>
 

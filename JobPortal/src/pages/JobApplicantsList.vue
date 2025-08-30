@@ -4,91 +4,97 @@
         <div class="flex-1 flex flex-col w-[69%]">
             <AdminNav />
             <main class="flex-1 p-3 overflow-auto">
-                    <div class="text-left text-slate-600 text-lg font-semibold p-5">
-                        Job Applications
-                    </div>
-                    <DataTable :value="applicants" v-model:filters="filters" dataKey="id" paginator :rows="10"
-                        :loading="loading" showGridlines filterDisplay="menu" :globalFilterFields="[
-                            'seeker.username',
-                            'job.title',
-                            'job.provider.username',
-                            'job.type',
-                            'job.location',
-                            'status',
-                            'coverLetter'
-                        ]" class="text-sm">
-                        <template #header>
-                            <div class="flex justify-between items-center">
-                                <Button icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter" />
-                                <IconField>
-                                    <InputIcon><i class="pi pi-search" /></InputIcon>
-                                    <InputText v-model="filters.global.value" placeholder="Keyword Search" />
-                                </IconField>
-                            </div>
+                <div class="text-left text-slate-600 text-lg font-semibold p-5">
+                    Job Applications
+                </div>
+                <DataTable :value="applicants" v-model:filters="filters" dataKey="id" paginator :rows="10"
+                    :loading="loading" showGridlines filterDisplay="menu" :globalFilterFields="[
+                        'seeker.username',
+                        'job.title',
+                        'job.provider.username',
+                        'job.type',
+                        'job.location',
+                        'status',
+                        'coverLetter'
+                    ]" class="text-sm">
+                    <template #header>
+                        <div class="flex justify-between items-center">
+                            <Button icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter" />
+                            <IconField>
+                                <InputIcon><i class="pi pi-search" /></InputIcon>
+                                <InputText v-model="filters.global.value" placeholder="Keyword Search" />
+                            </IconField>
+                        </div>
+                    </template>
+
+                    <template #empty>No applicants found.</template>
+                    <template #loading>Loading applicants. Please wait.</template>
+
+                    <Column header="S.N">
+                        <template #body="{ index }">{{ index + 1 }}</template>
+                    </Column>
+
+                    <!-- Applicant Name -->
+                    <Column field="seeker.username" header="Applicant Name" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.seeker?.user.username }}</template>
+                        <template #filter="{ filterModel }">
+                            <InputText v-model="filterModel.value" placeholder="Search by name" class="text-sm" />
                         </template>
+                    </Column>
 
-                        <template #empty>No applicants found.</template>
-                        <template #loading>Loading applicants. Please wait.</template>
+                    <!-- Job Title -->
+                    <Column field="job.title" header="Job Title" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.job?.title }}</template>
+                        <template #filter="{ filterModel }">
+                            <InputText v-model="filterModel.value" placeholder="Search job title" class="text-sm" />
+                        </template>
+                    </Column>
 
-                        <Column header="S.N">
-                            <template #body="{ index }">{{ index + 1 }}</template>
-                        </Column>
+                    <!-- Job Provider -->
+                    <Column field="job.provider.username" header="Provider" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.job?.provider?.username }}</template>
+                        <template #filter="{ filterModel }">
+                            <InputText v-model="filterModel.value" placeholder="Search provider" class="text-sm" />
+                        </template>
+                    </Column>
 
-                        <!-- Applicant Name -->
-                        <Column field="seeker.username" header="Applicant Name" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.seeker?.user.username }}</template>
-                            <template #filter="{ filterModel }">
-                                <InputText v-model="filterModel.value" placeholder="Search by name" class="text-sm" />
-                            </template>
-                        </Column>
+                    <!-- Job Type -->
+                    <Column field="job.type" header="Type" style="min-width: 10rem">
+                        <template #body="{ data }">{{ data.job?.type }}</template>
+                    </Column>
 
-                        <!-- Job Title -->
-                        <Column field="job.title" header="Job Title" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.job?.title }}</template>
-                            <template #filter="{ filterModel }">
-                                <InputText v-model="filterModel.value" placeholder="Search job title" class="text-sm" />
-                            </template>
-                        </Column>
+                    <!-- Job Location -->
+                    <Column field="job.location" header="Location" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.job?.location }}</template>
+                    </Column>
 
-                        <!-- Job Provider -->
-                        <Column field="job.provider.username" header="Provider" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.job?.provider?.username }}</template>
-                            <template #filter="{ filterModel }">
-                                <InputText v-model="filterModel.value" placeholder="Search provider" class="text-sm" />
-                            </template>
-                        </Column>
+                    <!-- Salary -->
+                    <Column field="job.salaryRange" header="Salary" style="min-width: 12rem">
+                        <template #body="{ data }">{{ data.job?.salaryRange }}</template>
+                    </Column>
 
-                        <!-- Job Type -->
-                        <Column field="job.type" header="Type" style="min-width: 10rem">
-                            <template #body="{ data }">{{ data.job?.type }}</template>
-                        </Column>
+                    <!-- Job Deadline -->
+                    <Column field="job.deadline" header="Deadline" style="min-width: 12rem">
+                        <template #body="{ data }">{{ formatDate(data.job?.deadline) }}</template>
+                    </Column>
 
-                        <!-- Job Location -->
-                        <Column field="job.location" header="Location" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.job?.location }}</template>
-                        </Column>
+                    <!-- Status -->
+                    <Column field="status" header="Status" style="min-width: 10rem">
+                        <template #body="{ data }">{{ data.status }}</template>
+                        <template #filter="{ filterModel }">
+                            <InputText v-model="filterModel.value" placeholder="Search status" class="text-sm" />
+                        </template>
+                    </Column>
+                    <Column field="Action" header="Action">
+                        <template #body="slotProps">
+                            <Button icon="pi pi-eye" class="p-button-sm"
+                                @click="viewApplicant(slotProps.row)" />
+                        </template>
+                    </Column>
 
-                        <!-- Salary -->
-                        <Column field="job.salaryRange" header="Salary" style="min-width: 12rem">
-                            <template #body="{ data }">{{ data.job?.salaryRange }}</template>
-                        </Column>
+                    <!-- Resume -->
+                </DataTable>
 
-                        <!-- Job Deadline -->
-                        <Column field="job.deadline" header="Deadline" style="min-width: 12rem">
-                            <template #body="{ data }">{{ formatDate(data.job?.deadline) }}</template>
-                        </Column>
-
-                        <!-- Status -->
-                        <Column field="status" header="Status" style="min-width: 10rem">
-                            <template #body="{ data }">{{ data.status }}</template>
-                            <template #filter="{ filterModel }">
-                                <InputText v-model="filterModel.value" placeholder="Search status" class="text-sm" />
-                            </template>
-                        </Column>
-
-                        <!-- Resume -->
-                    </DataTable>
-               
             </main>
         </div>
     </div>

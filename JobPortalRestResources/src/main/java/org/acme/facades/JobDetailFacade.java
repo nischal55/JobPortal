@@ -4,8 +4,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import org.acme.models.*;
+import org.acme.models.JobDetail;
+import org.acme.models.JobSeekerDetail;
+import org.acme.models.ResumeDetail;
 import org.jsoup.Jsoup;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -201,7 +204,7 @@ public class JobDetailFacade extends AbstractFacade<JobDetail> {
 
     public List<JobDetail> findByProviderId(Long providerId){
         try{
-            TypedQuery<JobDetail> query = em.createQuery("\"Select c from JobDetail c where c.provider.id = :provider_id",JobDetail.class);
+            TypedQuery<JobDetail> query = em.createQuery("\"Select c from JobDetail c where c.provider.user.id = :provider_id",JobDetail.class);
             query.setParameter("provider_id",providerId);
             return query.getResultList();
         }catch (Exception e){

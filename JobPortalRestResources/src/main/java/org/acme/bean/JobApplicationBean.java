@@ -48,4 +48,13 @@ public class JobApplicationBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
         }
     }
+
+    public Response findApplicantsByJobId(Long id){
+        try{
+            List<JobApplicants> jobApplicants = jobApplicantController.findApplicantsByJobId(id);
+            return Response.status(Response.Status.ACCEPTED).entity(jobApplicants).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
+        }
+    }
 }
