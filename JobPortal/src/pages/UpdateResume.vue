@@ -1,5 +1,6 @@
 <template>
   <Navbar />
+  <Toast />
   <div class="card flex justify-center mt-16">
     <Stepper :value="activeStep" linear class="basis-[50rem]">
       <StepList>
@@ -17,23 +18,28 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="text-sm font-medium">Contact No <span class="text-red-500">*</span></label>
-                  <InputText v-model="personalInfo.contactNo" class="w-full p-inputtext-sm h-11" placeholder="+977-9800000000" />
+                  <InputText v-model="personalInfo.contactNo" class="w-full p-inputtext-sm h-11"
+                    placeholder="+977-9800000000" />
                 </div>
                 <div>
                   <label class="text-sm font-medium">LinkedIn</label>
-                  <InputText v-model="personalInfo.linkedIn" class="w-full p-inputtext-sm h-11" placeholder="https://linkedin.com/in/…" />
+                  <InputText v-model="personalInfo.linkedIn" class="w-full p-inputtext-sm h-11"
+                    placeholder="https://linkedin.com/in/…" />
                 </div>
                 <div class="md:col-span-2">
                   <label class="text-sm font-medium">Address <span class="text-red-500">*</span></label>
-                  <InputText v-model="personalInfo.address" rows="2" class="w-full p-inputtext-sm h-11" placeholder="Kumaripati, Lalipur" />
+                  <InputText v-model="personalInfo.address" rows="2" class="w-full p-inputtext-sm h-11"
+                    placeholder="Kumaripati, Lalipur" />
                 </div>
                 <div class="md:col-span-2">
                   <label class="text-sm font-medium">Professional Summary <span class="text-red-500">*</span></label>
-                  <InputText v-model="personalInfo.summary" rows="3" class="w-full p-inputtext-sm h-11" placeholder="Brief overview of your background…" />
+                  <InputText v-model="personalInfo.summary" rows="3" class="w-full p-inputtext-sm h-11"
+                    placeholder="Brief overview of your background…" />
                 </div>
                 <div class="md:col-span-2">
                   <label class="text-sm font-medium">Skills <span class="text-red-500">*</span></label>
-                  <InputText v-model="personalInfo.skills" class="w-full p-inputtext-sm h-11" placeholder="e.g., Java, Spring Boot, Vue 3" />
+                  <InputText v-model="personalInfo.skills" class="w-full p-inputtext-sm h-11"
+                    placeholder="e.g., Java, Spring Boot, Vue 3" />
                 </div>
               </div>
             </div>
@@ -50,7 +56,8 @@
               <div class="flex justify-between items-center mb-2">
                 <h3 class="font-semibold text-base">Education {{ index + 1 }}</h3>
                 <div>
-                  <Button icon="pi pi-trash" severity="danger" rounded text size="small" v-if="educationList.length > 1" @click="removeEducation(index)" />
+                  <Button icon="pi pi-trash" severity="danger" rounded text size="small" v-if="educationList.length > 1"
+                    @click="removeEducation(index)" />
                   <Button icon="pi pi-plus" severity="success" rounded text size="small" @click="addEducation" />
                 </div>
               </div>
@@ -83,11 +90,13 @@
         <!-- Step 3: Certification -->
         <StepPanel v-slot="{ activateCallback }" value="3">
           <div class="flex flex-col gap-6">
-            <div v-for="(cert, index) in certificationList" :key="index" class="p-10 rounded-md shadow-sm bg-surface-50">
+            <div v-for="(cert, index) in certificationList" :key="index"
+              class="p-10 rounded-md shadow-sm bg-surface-50">
               <div class="flex justify-between items-center mb-2">
                 <h3 class="font-semibold text-base">Certification {{ index + 1 }}</h3>
                 <div>
-                  <Button icon="pi pi-trash" severity="danger" rounded text size="small" v-if="certificationList.length > 1" @click="removeCertification(index)" />
+                  <Button icon="pi pi-trash" severity="danger" rounded text size="small"
+                    v-if="certificationList.length > 1" @click="removeCertification(index)" />
                   <Button icon="pi pi-plus" severity="success" rounded text size="small" @click="addCertification" />
                 </div>
               </div>
@@ -120,7 +129,8 @@
               <div class="flex justify-between items-center mb-2">
                 <h3 class="font-semibold text-base">Experience {{ index + 1 }}</h3>
                 <div>
-                  <Button icon="pi pi-trash" severity="danger" rounded text size="small" v-if="experienceList.length > 1" @click="removeExperience(index)" />
+                  <Button icon="pi pi-trash" severity="danger" rounded text size="small"
+                    v-if="experienceList.length > 1" @click="removeExperience(index)" />
                   <Button icon="pi pi-plus" severity="success" rounded text size="small" @click="addExperience" />
                 </div>
               </div>
@@ -149,7 +159,7 @@
             </div>
             <div class="flex pt-6 justify-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback('3')" />
-              <!-- <Button label="Update" icon="pi pi-check" iconPos="right" @click="updateResume" /> -->
+              <Button label="Update" icon="pi pi-check" iconPos="right" @click="updateResume" />
             </div>
           </div>
         </StepPanel>
@@ -163,7 +173,9 @@ import { ref, onMounted } from 'vue';
 import Navbar from '@/components/navbar.vue';
 import ApiService from '@/services/ApiService';
 import { Button, Step, StepList, StepPanel, StepPanels, Stepper, InputText, InputNumber } from 'primevue';
+import { useToast } from 'primevue/usetoast';
 
+const toast = useToast();
 const activeStep = ref('1');
 
 // Personal Info
@@ -224,19 +236,14 @@ onMounted(async () => {
 // Update resume
 async function updateResume() {
   try {
-    const userId = localStorage.getItem('user_id');
-    if (!userId) return;
-
-    const resumeRes = await ApiService.get(`/resumedetail/findByUserId/${userId}`);
-    const resumeId = resumeRes.data.id;
-
     // Update personal info
-    await ApiService.put(`/jobseeker/findByUserId/${userId}`, personalInfo.value);
+    await ApiService.put(`/jobseeker/update`, personalInfo.value);
 
     // Update education
     for (const edu of educationList.value) {
+      console.log(edu)
       if (edu.id) {
-        await ApiService.put(`/education/findById/${edu.id}`, edu);
+        await ApiService.put(`/education/update`, edu);
       } else {
         await ApiService.post('/education/create', { ...edu, resume: { id: resumeId } });
       }
@@ -245,7 +252,7 @@ async function updateResume() {
     // Update certification
     for (const cert of certificationList.value) {
       if (cert.id) {
-        await ApiService.put(`/certification/findById/${cert.id}`, cert);
+        await ApiService.put(`/certification/update`, cert);
       } else {
         await ApiService.post('/certification/create', { ...cert, resume: { id: resumeId } });
       }
@@ -254,16 +261,15 @@ async function updateResume() {
     // Update experience
     for (const exp of experienceList.value) {
       if (exp.id) {
-        await ApiService.put(`/experience/findById/${exp.id}`, exp);
+        await ApiService.put(`/resumeExperiences/update`, exp);
       } else {
-        await ApiService.post('/experience/create', { ...exp, resume: { id: resumeId } });
+        await ApiService.post('/resumeExperiences/create', { ...exp, resume: { id: resumeId } });
       }
     }
 
-    alert('Resume updated successfully!');
+    toast.add({ severity: 'success', summary: 'Success', detail: 'Resume updated successfully!', life: 3000 });
   } catch (err) {
-    console.error('Update failed:', err);
-    alert('Failed to update resume. Please try again.');
+    toast.add({ severity: 'danger', summary: 'danger', detail: 'Resume updated Failed!', life: 3000 });
   }
 }
 </script>

@@ -38,4 +38,10 @@ public class jobSeekerResources {
     public Response findByUserId(@PathParam("id") Long id){
         return jobSeekerBean.findByUserId(id);
     }
+
+    @PUT
+    @Path("/update")
+    public Response update(JobSeekerDetail jobSeekerDetail){
+        return jobSeekerBean.updateJobSeeker(jobSeekerDetail);
+    }
 }

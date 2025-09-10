@@ -47,4 +47,13 @@ public class ResumeExperienceController {
             return null;
         }
     }
+
+    @Transactional
+    public void udpateResumeExperience(ResumeExperience resumeExperience){
+        try{
+            resumeExperienceFacade.edit(resumeExperience);
+        }catch (Exception e){
+
+        }
+    }
 }

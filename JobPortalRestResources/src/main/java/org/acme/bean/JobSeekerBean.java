@@ -48,4 +48,13 @@ public class JobSeekerBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records found").build();
         }
     }
+
+    public Response updateJobSeeker(JobSeekerDetail jobSeekerDetail){
+        try{
+            jobSeekerController.updateJobSeeker(jobSeekerDetail);
+            return Response.status(Response.Status.ACCEPTED).entity("Updated Successfully").build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Update Failed").build();
+        }
+    }
 }

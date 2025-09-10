@@ -48,4 +48,13 @@ public class ResumeExperienceBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records Found").build();
         }
     }
+
+    public Response updateResumeExperience(ResumeExperience resumeExperience){
+        try{
+            resumeExperienceController.udpateResumeExperience(resumeExperience);
+            return Response.status(Response.Status.ACCEPTED).entity(resumeExperience).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Update Failed").build();
+        }
+    }
 }

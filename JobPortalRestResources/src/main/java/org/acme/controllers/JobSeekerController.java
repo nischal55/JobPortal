@@ -45,4 +45,13 @@ public class JobSeekerController {
             return null;
         }
     }
+
+    @Transactional
+    public void updateJobSeeker(JobSeekerDetail jobSeekerDetail){
+        try{
+            jobSeekerDetailFacade.edit(jobSeekerDetail);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

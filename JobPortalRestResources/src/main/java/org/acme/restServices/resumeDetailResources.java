@@ -37,4 +37,10 @@ public class resumeDetailResources {
     public Response findByUserId(@PathParam("id") Long id){
         return resumeDetailBean.findByUserId(id);
     }
+
+    @PUT
+    @Path("/update")
+    public Response updateResumeDetail(ResumeDetail resumeDetail){
+        return resumeDetailBean.udpateResumeDetail(resumeDetail);
+    }
 }

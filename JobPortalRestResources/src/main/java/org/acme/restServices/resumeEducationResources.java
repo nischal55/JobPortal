@@ -27,7 +27,7 @@ public class resumeEducationResources {
         return resumeEducationBean.findAll();
     }
 
-    @PUT
+    @GET
     @Path("/findById/{id}")
     public Response findById(@PathParam("id") Long id){
         return resumeEducationBean.findById(id);
@@ -37,6 +37,12 @@ public class resumeEducationResources {
     @Path("/findByResumeId/{id}")
     public Response findByResumeId(@PathParam("id") Long id){
         return resumeEducationBean.findByResumeId(id);
+    }
+
+    @PUT
+    @Path("/update")
+    public Response udpate(ResumeEducation resumeEducation){
+        return resumeEducationBean.updateResumeEducation(resumeEducation);
     }
 
 }

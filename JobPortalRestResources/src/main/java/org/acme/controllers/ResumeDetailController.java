@@ -47,4 +47,13 @@ public class ResumeDetailController {
             return null;
         }
     }
+
+    @Transactional
+    public void udpateResumeDetail(ResumeDetail resumeDetail){
+        try{
+            resumeDetailFacade.edit(resumeDetail);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

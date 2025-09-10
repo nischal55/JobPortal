@@ -48,4 +48,13 @@ public class ResumeDetailBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
         }
     }
+
+    public Response udpateResumeDetail(ResumeDetail resumeDetail){
+        try{
+            resumeDetailController.udpateResumeDetail(resumeDetail);
+            return Response.status(Response.Status.ACCEPTED).entity("Updated Successfully").build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records Found").build();
+        }
+    }
 }

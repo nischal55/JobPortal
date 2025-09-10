@@ -38,4 +38,10 @@ public class resumeCertificationResources {
     public Response findByResumeId(@PathParam("id") Long id){
         return resumeCertificationBean.findByResumeId(id);
     }
+
+    @PUT
+    @Path("/update")
+    public Response updateResumeCertification(ResumeCertification resumeCertification){
+        return resumeCertificationBean.updateResumeCertification(resumeCertification);
+    }
 }

@@ -47,6 +47,14 @@ public class ResumeEducationBean {
         } catch (Exception e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Records Found").build();
         }
+    }
 
+    public Response updateResumeEducation(ResumeEducation resumeEducation){
+        try{
+            resumeEducationController.udpateResumeEducation(resumeEducation);
+            return Response.status(Response.Status.ACCEPTED).entity(resumeEducation).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Update Failed").build();
+        }
     }
 }

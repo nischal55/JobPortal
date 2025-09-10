@@ -12,9 +12,9 @@
           </div>
 
           <DataTable :value="jobs" v-model:filters="filters" dataKey="id" paginator :rows="10" :loading="loading"
-            showGridlines filterDisplay="menu" :globalFilterFields="[
-              'title', 'provider.username', 'type', 'location', 'salaryRange', 'description', 'requirements'
-            ]" class="text-sm">
+            showGridlines filterDisplay="menu"
+            :globalFilterFields="['title', 'provider.username', 'type', 'location', 'salaryRange', 'description', 'requirements']"
+            class="text-sm">
             <template #header>
               <div class="flex justify-between items-center">
                 <Button icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter" />
@@ -30,18 +30,19 @@
 
             <Column header="S.N"><template #body="{ index }">{{ index + 1 }}</template></Column>
             <Column field="title" header="Job Title"><template #body="{ data }">{{ data.title }}</template></Column>
-            <Column field="provider.username" header="Provider"><template #body="{ data }">{{ data.provider?.username ||
-                'N/A' }}</template></Column>
+            <Column field="provider.username" header="Provider">
+              <template #body="{ data }">{{ data.provider?.username || 'N/A' }}</template>
+            </Column>
             <Column field="type" header="Type"><template #body="{ data }">{{ data.type }}</template></Column>
             <Column field="location" header="Location"><template #body="{ data }">{{ data.location }}</template>
             </Column>
             <Column field="salaryRange" header="Salary"><template #body="{ data }">{{ data.salaryRange }}</template>
             </Column>
-            <Column field="deadline" header="Deadline"><template #body="{ data }">{{ formatDate(data.deadline)
-                }}</template>
+            <Column field="deadline" header="Deadline">
+              <template #body="{ data }">{{ formatDate(data.deadline) }}</template>
             </Column>
-            <Column field="createdAt" header="Created At"><template #body="{ data }">{{ formatDateTime(data.createdAt)
-                }}</template>
+            <Column field="createdAt" header="Created At">
+              <template #body="{ data }">{{ formatDateTime(data.createdAt) }}</template>
             </Column>
 
             <Column field="Action" header="Action">
@@ -100,7 +101,8 @@
       <Column field="Action" header="Action">
         <template #body="{ data }">
           <div class="flex gap-2">
-            <Button icon="pi pi-eye" class="p-button-sm" title="View Applicant Detail" @click="openDialog(data)" />
+            <Button icon="pi pi-eye" class="p-button-sm" title="View Applicant Detail" @click="viewResume(data)" />
+            <Button icon="pi pi-check" class="p-button-sm" title="Select Applicant" />
           </div>
         </template>
       </Column>
@@ -108,6 +110,73 @@
 
     <template #footer>
       <Button label="Rank With AI" variant="outlined" severity="secondary" />
+    </template>
+  </Dialog>
+
+  <Dialog v-model:visible="applicantDialogVisible" modal header="Applicant Detail" :style="{ width: '45rem' }"
+    class="p-4">
+    <div v-if="selectedApplicant" class="space-y-5">
+
+      <!-- Applicant Header -->
+      <div class="flex items-center gap-4 border-b pb-3">
+        <Avatar
+          :image="selectedApplicant?.seeker?.user?.profileImage || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
+          shape="circle" size="xlarge" class="border border-gray-200 shadow-sm" />
+        <div>
+          <h2 class="font-bold text-xl">{{ selectedApplicant?.seeker?.user?.username }}</h2>
+          <p class="text-gray-500">{{ selectedApplicant?.seeker?.user?.email }}</p>
+          <p class="text-gray-500">Phone: {{ selectedApplicant?.seeker?.contactNo || 'N/A' }}</p>
+        </div>
+      </div>
+
+      <!-- Resume Summary -->
+      <div class="bg-gray-50 p-3 rounded shadow-sm">
+        <h4 class="font-semibold text-md mb-1">Resume Summary</h4>
+        <p class="text-gray-700">{{ selectedApplicant?.seeker?.summary || 'N/A' }}</p>
+        <p class="text-gray-500 mt-1 text-sm">Applied On: {{ formatDateTime(selectedApplicant?.appliedAt) }}</p>
+      </div>
+
+      <!-- Education Section -->
+      <div v-if="applicantEducation.length" class="bg-white p-3 rounded shadow-sm border">
+        <h4 class="font-semibold text-md mb-2">Education</h4>
+        <ul class="space-y-1">
+          <li v-for="(edu, index) in applicantEducation" :key="index" class="flex justify-between">
+            <span>{{ edu.degree }} - {{ edu.institution }}</span>
+            <span class="text-gray-500 text-sm">
+              ({{ edu.startYear || 'N/A' }} - {{ edu.endYear || 'N/A' }})
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Certification Section -->
+      <div v-if="applicantCertifications.length" class="bg-white p-3 rounded shadow-sm border">
+        <h4 class="font-semibold text-md mb-2">Certifications</h4>
+        <ul class="space-y-1">
+          <li v-for="(cert, index) in applicantCertifications" :key="index" class="flex justify-between">
+            <span>{{ cert.certificationTitle }} - {{ cert.issuingOrg }}</span>
+            <span class="text-gray-500 text-sm">({{ cert.issueDate || 'N/A' }})</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Experience Section -->
+      <div v-if="applicantExperience.length" class="bg-white p-3 rounded shadow-sm border">
+        <h4 class="font-semibold text-md mb-2">Experience</h4>
+        <ul class="space-y-1">
+          <li v-for="(exp, index) in applicantExperience" :key="index" class="flex justify-between">
+            <span>{{ exp.jobTitle }} at {{ exp.companyName }}</span>
+            <span class="text-gray-500 text-sm">
+              ({{ exp.startDate || 'N/A' }} - {{ exp.endDate || 'N/A' }})
+            </span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <template #footer>
+      <Button label="Close" class="p-button-text" @click="applicantDialogVisible = false" />
     </template>
   </Dialog>
 
@@ -181,12 +250,14 @@ const loading = ref(false)
 const visible = ref(false)
 const editDialogVisible = ref(false)
 const deleteDialogVisible = ref(false)
+const applicantDialogVisible = ref(false)
 
 const selectedJob = ref(null)
 const editingJob = ref({})
 const jobToDelete = ref(null)
-const user_id = localStorage.getItem('user_id')
+const selectedApplicant = ref(null)
 
+const user_id = localStorage.getItem('user_id')
 const types = ['full_time', 'part_time', 'internship', 'contract']
 
 const FilterMatchMode = { CONTAINS: 'contains' }
@@ -222,9 +293,7 @@ const clearFilter = () => {
 const formatDate = dateStr => (dateStr ? new Date(dateStr).toLocaleDateString() : '')
 const formatDateTime = dateStr => (dateStr ? new Date(dateStr).toLocaleString() : '')
 
-const openAddJob = () => {
-  router.push({ name: 'jobCreateForm' })
-}
+const openAddJob = () => router.push({ name: 'jobCreateForm' })
 
 const openDialog = async job => {
   selectedJob.value = JSON.parse(JSON.stringify(job))
@@ -270,4 +339,44 @@ const deleteJob = async () => {
     toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete job', life: 3000 })
   }
 }
+const applicantEducation = ref([])
+const applicantCertifications = ref([])
+const applicantExperience = ref([])
+
+
+const viewResume = async (applicant) => {
+  try {
+    // Fetch applicant details
+    const res = await ApiService.get(`/jobApplicants/findById/${applicant.id}`)
+    selectedApplicant.value = res.data
+
+    const resumeId = selectedApplicant.value.resume?.id
+
+    if (resumeId) {
+      // Education
+      const eduRes = await ApiService.get(`/education/findByResumeId/${resumeId}`)
+      applicantEducation.value = eduRes.data || []
+
+      // Certifications
+      const certRes = await ApiService.get(`/certification/findByResumeId/${resumeId}`)
+      applicantCertifications.value = certRes.data || []
+
+      // Experiences
+      const expRes = await ApiService.get(`/resumeExperiences/findByResumeId/${resumeId}`)
+      applicantExperience.value = expRes.data || []
+    } else {
+      applicantEducation.value = []
+      applicantCertifications.value = []
+      applicantExperience.value = []
+    }
+
+    // Open dialog
+    applicantDialogVisible.value = true
+  } catch (err) {
+    console.error('Error fetching applicant details:', err)
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load applicant details', life: 3000 })
+  }
+}
+
+
 </script>

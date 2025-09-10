@@ -39,4 +39,9 @@ public class resumeExperienceResources {
         return resumeExperienceBean.findByResumeId(id);
     }
 
+    @PUT
+    @Path("/update")
+    public Response update(ResumeExperience resumeExperience){
+        return resumeExperienceBean.updateResumeExperience(resumeExperience);
+    }
 }

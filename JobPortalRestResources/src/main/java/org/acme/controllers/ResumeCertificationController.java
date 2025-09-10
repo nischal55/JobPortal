@@ -50,4 +50,13 @@ public class ResumeCertificationController {
             return null;
         }
     }
+
+    @Transactional
+    public void updateResumeCertification(ResumeCertification resumeCertification){
+        try{
+            resumeCertificationFacade.edit(resumeCertification);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
