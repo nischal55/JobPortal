@@ -11,10 +11,18 @@
             <Button label="Add Job" icon="pi pi-plus" class="p-button-sm" @click="openAddJob" />
           </div>
 
-          <DataTable :value="jobs" v-model:filters="filters" dataKey="id" paginator :rows="10" :loading="loading"
-            showGridlines filterDisplay="menu"
+          <DataTable
+            :value="jobs"
+            v-model:filters="filters"
+            dataKey="id"
+            paginator
+            :rows="10"
+            :loading="loading"
+            showGridlines
+            filterDisplay="menu"
             :globalFilterFields="['title', 'provider.username', 'type', 'location', 'salaryRange', 'description', 'requirements']"
-            class="text-sm">
+            class="text-sm"
+          >
             <template #header>
               <div class="flex justify-between items-center">
                 <Button icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter" />
@@ -28,15 +36,23 @@
             <template #empty>No job details found.</template>
             <template #loading>Loading jobs. Please wait.</template>
 
-            <Column header="S.N"><template #body="{ index }">{{ index + 1 }}</template></Column>
-            <Column field="title" header="Job Title"><template #body="{ data }">{{ data.title }}</template></Column>
+            <Column header="S.N">
+              <template #body="{ index }">{{ index + 1 }}</template>
+            </Column>
+            <Column field="title" header="Job Title">
+              <template #body="{ data }">{{ data.title }}</template>
+            </Column>
             <Column field="provider.username" header="Provider">
               <template #body="{ data }">{{ data.provider?.username || 'N/A' }}</template>
             </Column>
-            <Column field="type" header="Type"><template #body="{ data }">{{ data.type }}</template></Column>
-            <Column field="location" header="Location"><template #body="{ data }">{{ data.location }}</template>
+            <Column field="type" header="Type">
+              <template #body="{ data }">{{ data.type }}</template>
             </Column>
-            <Column field="salaryRange" header="Salary"><template #body="{ data }">{{ data.salaryRange }}</template>
+            <Column field="location" header="Location">
+              <template #body="{ data }">{{ data.location }}</template>
+            </Column>
+            <Column field="salaryRange" header="Salary">
+              <template #body="{ data }">{{ data.salaryRange }}</template>
             </Column>
             <Column field="deadline" header="Deadline">
               <template #body="{ data }">{{ formatDate(data.deadline) }}</template>
@@ -49,10 +65,8 @@
               <template #body="{ data }">
                 <div class="flex gap-2">
                   <Button icon="pi pi-eye" class="p-button-sm" title="View Applicants" @click="openDialog(data)" />
-                  <Button icon="pi pi-pencil" class="p-button-sm p-button-warning" title="Edit Job"
-                    @click="openEditDialog(data)" />
-                  <Button icon="pi pi-trash" class="p-button-sm p-button-danger" title="Delete Job"
-                    @click="confirmDelete(data)" />
+                  <Button icon="pi pi-pencil" class="p-button-sm p-button-warning" title="Edit Job" @click="openEditDialog(data)" />
+                  <Button icon="pi pi-trash" class="p-button-sm p-button-danger" title="Delete Job" @click="confirmDelete(data)" />
                 </div>
               </template>
             </Column>
@@ -62,7 +76,7 @@
     </div>
   </div>
 
-  <!-- Dialog: Job Details + Applicants -->
+  <!-- Job Details + Applicants -->
   <Dialog v-model:visible="visible" modal header="Job Details" :style="{ width: '50rem' }">
     <template #header>
       <div class="inline-flex items-center gap-2">
@@ -73,36 +87,32 @@
 
     <!-- Job Info -->
     <div class="flex flex-col gap-3 mb-4">
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Title</label><span>{{ selectedJob?.title
-          }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Type</label><span>{{ selectedJob?.type
-          }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Location</label><span>{{
-        selectedJob?.location }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Salary</label><span>{{
-        selectedJob?.salaryRange }}</span></div>
-      <div class="flex items-center gap-4"><label class="font-semibold w-24">Deadline</label><span>{{
-        formatDate(selectedJob?.deadline) }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Title</label><span>{{ selectedJob?.title }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Type</label><span>{{ selectedJob?.type }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Location</label><span>{{ selectedJob?.location }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Salary</label><span>{{ selectedJob?.salaryRange }}</span></div>
+      <div class="flex items-center gap-4"><label class="font-semibold w-24">Deadline</label><span>{{ formatDate(selectedJob?.deadline) }}</span></div>
     </div>
 
-    <!-- Applicants List -->
+    <!-- Applicants -->
     <h3 class="text-lg font-semibold text-slate-600 mt-4 mb-2">Applicants</h3>
     <DataTable :value="applicants" dataKey="id" paginator :rows="5" showGridlines class="text-sm">
       <template #empty>No applicants found.</template>
       <Column header="S.N"><template #body="{ index }">{{ index + 1 }}</template></Column>
       <Column field="name" header="Name"><template #body="{ data }">{{ data.seeker.user.username }}</template></Column>
-      <Column field="appliedAt" header="Applied On"><template #body="{ data }">{{ formatDateTime(data.appliedAt)
-          }}</template></Column>
+      <Column field="appliedAt" header="Applied On"><template #body="{ data }">{{ formatDateTime(data.appliedAt) }}</template></Column>
       <Column field="status" header="Status">
         <template #body="{ data }">
-          <Tag :value="data.status" :severity="data.status === 'Pending' ? 'warn' : 'success'" />
+          <Tag :value="data.status" :severity="data.status === 'applied' ? 'warn' : data.status === 'reviewing' ? 'info' : data.status === 'accepted' ? 'success' : 'danger'" />
         </template>
       </Column>
-      <Column field="Action" header="Action">
+      <Column field="Action" class="w-20" header="Action">
         <template #body="{ data }">
           <div class="flex gap-2">
             <Button icon="pi pi-eye" class="p-button-sm" title="View Applicant Detail" @click="viewResume(data)" />
-            <Button icon="pi pi-check" class="p-button-sm" title="Select Applicant" />
+            <Button icon="pi pi-arrow-circle-right" class="p-button-sm" :disabled="data.status !== 'applied'" title="Review Applicant" @click="confirmReview(data)" />
+            <Button icon="pi pi-check" class="p-button-sm" :disabled="data.status !== 'reviewing'" title="Approve Applicant" @click="confirmApprove(data)" />
+            <Button icon="pi pi-times" class="p-button-sm p-button-danger" :disabled="data.status !== 'reviewing'" title="Reject Applicant" @click="confirmReject(data)" />
           </div>
         </template>
       </Column>
@@ -113,15 +123,11 @@
     </template>
   </Dialog>
 
-  <Dialog v-model:visible="applicantDialogVisible" modal header="Applicant Detail" :style="{ width: '45rem' }"
-    class="p-4">
+  <!-- Applicant Resume Dialog -->
+  <Dialog v-model:visible="applicantDialogVisible" modal header="Applicant Detail" :style="{ width: '45rem' }" class="p-4">
     <div v-if="selectedApplicant" class="space-y-5">
-
-      <!-- Applicant Header -->
-      <div class="flex items-center gap-4 border-b pb-3">
-        <Avatar
-          :image="selectedApplicant?.seeker?.user?.profileImage || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
-          shape="circle" size="xlarge" class="border border-gray-200 shadow-sm" />
+      <div class="flex items-center gap-4 border-b border-slate-400 pb-3">
+        <Avatar :image="selectedApplicant?.seeker?.user?.profileImage || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'" shape="circle" size="xlarge" class="border border-gray-200 shadow-sm" />
         <div>
           <h2 class="font-bold text-xl">{{ selectedApplicant?.seeker?.user?.username }}</h2>
           <p class="text-gray-500">{{ selectedApplicant?.seeker?.user?.email }}</p>
@@ -129,28 +135,24 @@
         </div>
       </div>
 
-      <!-- Resume Summary -->
+      <!-- Resume sections -->
       <div class="bg-gray-50 p-3 rounded shadow-sm">
         <h4 class="font-semibold text-md mb-1">Resume Summary</h4>
         <p class="text-gray-700">{{ selectedApplicant?.seeker?.summary || 'N/A' }}</p>
         <p class="text-gray-500 mt-1 text-sm">Applied On: {{ formatDateTime(selectedApplicant?.appliedAt) }}</p>
       </div>
 
-      <!-- Education Section -->
-      <div v-if="applicantEducation.length" class="bg-white p-3 rounded shadow-sm border">
+      <div v-if="applicantEducation.length" class="bg-white p-3 rounded shadow-sm border border-slate-300">
         <h4 class="font-semibold text-md mb-2">Education</h4>
         <ul class="space-y-1">
           <li v-for="(edu, index) in applicantEducation" :key="index" class="flex justify-between">
             <span>{{ edu.degree }} - {{ edu.institution }}</span>
-            <span class="text-gray-500 text-sm">
-              ({{ edu.startYear || 'N/A' }} - {{ edu.endYear || 'N/A' }})
-            </span>
+            <span class="text-gray-500 text-sm">({{ edu.startYear || 'N/A' }} - {{ edu.endYear || 'N/A' }})</span>
           </li>
         </ul>
       </div>
 
-      <!-- Certification Section -->
-      <div v-if="applicantCertifications.length" class="bg-white p-3 rounded shadow-sm border">
+      <div v-if="applicantCertifications.length" class="bg-white p-3 rounded shadow-sm border border-slate-300">
         <h4 class="font-semibold text-md mb-2">Certifications</h4>
         <ul class="space-y-1">
           <li v-for="(cert, index) in applicantCertifications" :key="index" class="flex justify-between">
@@ -160,19 +162,15 @@
         </ul>
       </div>
 
-      <!-- Experience Section -->
-      <div v-if="applicantExperience.length" class="bg-white p-3 rounded shadow-sm border">
+      <div v-if="applicantExperience.length" class="bg-white p-3 rounded shadow-sm border border-slate-300">
         <h4 class="font-semibold text-md mb-2">Experience</h4>
         <ul class="space-y-1">
           <li v-for="(exp, index) in applicantExperience" :key="index" class="flex justify-between">
             <span>{{ exp.jobTitle }} at {{ exp.companyName }}</span>
-            <span class="text-gray-500 text-sm">
-              ({{ exp.startDate || 'N/A' }} - {{ exp.endDate || 'N/A' }})
-            </span>
+            <span class="text-gray-500 text-sm">({{ exp.startDate || 'N/A' }} - {{ exp.endDate || 'N/A' }})</span>
           </li>
         </ul>
       </div>
-
     </div>
 
     <template #footer>
@@ -180,29 +178,17 @@
     </template>
   </Dialog>
 
-  <!-- Dialog: Edit Job -->
+  <!-- Edit, Delete, Approve, Review, Reject dialogs -->
   <Dialog v-model:visible="editDialogVisible" modal header="Edit Job" :style="{ width: '50rem' }">
+    <!-- form -->
     <div class="space-y-4">
-      <div><label class="block mb-1">Title</label>
-        <InputText v-model="editingJob.title" class="w-full" />
-      </div>
-      <div><label class="block mb-1">Description</label>
-        <Editor v-model="editingJob.description" class="w-full" editorStyle="height: 150px" />
-      </div>
-      <div><label class="block mb-1">Location</label>
-        <InputText v-model="editingJob.location" class="w-full" />
-      </div>
-      <div><label class="block mb-1">Salary</label>
-        <InputText v-model="editingJob.salaryRange" class="w-full" />
-      </div>
-      <div><label class="block mb-1">Job Type</label>
-        <Dropdown v-model="editingJob.type" :options="types" class="w-full" />
-      </div>
-      <div><label class="block mb-1">Requirements</label>
-        <Editor v-model="editingJob.requirements" class="w-full" editorStyle="height: 150px" />
-      </div>
-      <div><label class="block mb-1">Deadline</label><input type="date" v-model="editingJob.deadline"
-          class="w-full border rounded px-3 py-2" /></div>
+      <div><label class="block mb-1">Title</label><InputText v-model="editingJob.title" class="w-full" /></div>
+      <div><label class="block mb-1">Description</label><Editor v-model="editingJob.description" class="w-full" editorStyle="height: 150px" /></div>
+      <div><label class="block mb-1">Location</label><InputText v-model="editingJob.location" class="w-full" /></div>
+      <div><label class="block mb-1">Salary</label><InputText v-model="editingJob.salaryRange" class="w-full" /></div>
+      <div><label class="block mb-1">Job Type</label><Dropdown v-model="editingJob.type" :options="types" class="w-full" /></div>
+      <div><label class="block mb-1">Requirements</label><Editor v-model="editingJob.requirements" class="w-full" editorStyle="height: 150px" /></div>
+      <div><label class="block mb-1">Deadline</label><input type="date" v-model="editingJob.deadline" class="w-full border rounded px-3 py-2" /></div>
     </div>
     <template #footer>
       <Button label="Cancel" class="p-button-text" @click="editDialogVisible = false" />
@@ -210,36 +196,58 @@
     </template>
   </Dialog>
 
-  <!-- Delete Confirmation Dialog -->
   <Dialog v-model:visible="deleteDialogVisible" modal header="Confirm Delete" :style="{ width: '30rem' }">
-    <div class="text-center text-red-600 text-lg mb-4">Are you sure you want to delete this job?</div>
+    <div class="text-center text-slate-600 text-lg mb-4">Are you sure you want to delete this job?</div>
     <template #footer>
       <Button label="Cancel" class="p-button-text" @click="deleteDialogVisible = false" />
       <Button label="Delete" severity="danger" @click="deleteJob" />
     </template>
   </Dialog>
+
+  <Dialog v-model:visible="approveDialogVisible" modal header="Approve Application" :style="{ width: '30rem' }">
+    <div class="text-center text-slate-600 text-lg mb-4">Are you sure you want to Approve this Application?</div>
+    <template #footer>
+      <Button label="Cancel" class="p-button-text" @click="approveDialogVisible = false" />
+      <Button label="Approve" severity="success" @click="approveApplicant" />
+    </template>
+  </Dialog>
+
+  <Dialog v-model:visible="reviewDialogVisible" modal header="Review Application" :style="{ width: '30rem' }">
+    <div class="text-center text-slate-600 text-lg mb-4">Set this Application to <b>Reviewing</b>?</div>
+    <template #footer>
+      <Button label="Cancel" class="p-button-text" @click="reviewDialogVisible = false" />
+      <Button label="Set to Reviewing" severity="warning" @click="reviewApplicant" />
+    </template>
+  </Dialog>
+
+  <Dialog v-model:visible="rejectDialogVisible" modal header="Reject Application" :style="{ width: '30rem' }">
+    <div class="text-center text-slate-600 text-lg mb-4">Are you sure you want to Reject this Application?</div>
+    <template #footer>
+      <Button label="Cancel" class="p-button-text" @click="rejectDialogVisible = false" />
+      <Button label="Reject" severity="danger" @click="rejectApplicant" />
+    </template>
+  </Dialog>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import Sidebar from '@/components/Sidebar.vue'
-import AdminNav from '@/components/AdminNav.vue'
-import ApiService from '@/services/ApiService'
-
-import DataTable from 'primevue/datatable'
-import Column from 'primevue/column'
-import Button from 'primevue/button'
-import InputText from 'primevue/inputtext'
-import InputIcon from 'primevue/inputicon'
-import IconField from 'primevue/iconfield'
-import Dialog from 'primevue/dialog'
-import Editor from 'primevue/editor'
-import Dropdown from 'primevue/dropdown'
-import Avatar from 'primevue/avatar'
-import Tag from 'primevue/tag'
-import Toast from 'primevue/toast'
-import { useToast } from 'primevue/usetoast'
+import { ref, onMounted } from "vue"
+import { useRouter } from "vue-router"
+import Sidebar from "@/components/Sidebar.vue"
+import AdminNav from "@/components/AdminNav.vue"
+import ApiService from "@/services/ApiService"
+import DataTable from "primevue/datatable"
+import Column from "primevue/column"
+import Button from "primevue/button"
+import InputText from "primevue/inputtext"
+import InputIcon from "primevue/inputicon"
+import IconField from "primevue/iconfield"
+import Dialog from "primevue/dialog"
+import Editor from "primevue/editor"
+import Dropdown from "primevue/dropdown"
+import Avatar from "primevue/avatar"
+import Tag from "primevue/tag"
+import Toast from "primevue/toast"
+import { useToast } from "primevue/usetoast"
 
 const toast = useToast()
 const router = useRouter()
@@ -251,20 +259,31 @@ const visible = ref(false)
 const editDialogVisible = ref(false)
 const deleteDialogVisible = ref(false)
 const applicantDialogVisible = ref(false)
+const approveDialogVisible = ref(false)
+const reviewDialogVisible = ref(false)
+const rejectDialogVisible = ref(false)
 
 const selectedJob = ref(null)
 const editingJob = ref({})
 const jobToDelete = ref(null)
 const selectedApplicant = ref(null)
 
-const user_id = localStorage.getItem('user_id')
-const types = ['full_time', 'part_time', 'internship', 'contract']
+const applicantToApprove = ref(null)
+const applicantToReview = ref(null)
+const applicantToReject = ref(null)
 
-const FilterMatchMode = { CONTAINS: 'contains' }
+const applicantEducation = ref([])
+const applicantCertifications = ref([])
+const applicantExperience = ref([])
+
+const user_id = localStorage.getItem("user_id")
+const types = ["full_time", "part_time", "internship", "contract"]
+
+const FilterMatchMode = { CONTAINS: "contains" }
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
-  'provider.username': { value: null, matchMode: FilterMatchMode.CONTAINS },
+  "provider.username": { value: null, matchMode: FilterMatchMode.CONTAINS },
   type: { value: null, matchMode: FilterMatchMode.CONTAINS },
   location: { value: null, matchMode: FilterMatchMode.CONTAINS },
   salaryRange: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -278,37 +297,36 @@ const fetchJobs = async () => {
     const res = await ApiService.get(`/jobDetail/findByProvider/${user_id}`)
     jobs.value = res.data
   } catch (err) {
-    console.error('Error fetching jobs:', err)
+    console.error("Error fetching jobs:", err)
   } finally {
     loading.value = false
   }
 }
-
 onMounted(fetchJobs)
 
 const clearFilter = () => {
-  Object.keys(filters.value).forEach(key => (filters.value[key].value = null))
+  Object.keys(filters.value).forEach((key) => (filters.value[key].value = null))
 }
 
-const formatDate = dateStr => (dateStr ? new Date(dateStr).toLocaleDateString() : '')
-const formatDateTime = dateStr => (dateStr ? new Date(dateStr).toLocaleString() : '')
+const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : "")
+const formatDateTime = (d) => (d ? new Date(d).toLocaleString() : "")
 
-const openAddJob = () => router.push({ name: 'jobCreateForm' })
+const openAddJob = () => router.push({ name: "jobCreateForm" })
 
-const openDialog = async job => {
+const openDialog = async (job) => {
   selectedJob.value = JSON.parse(JSON.stringify(job))
-  if (!selectedJob.value.provider) selectedJob.value.provider = { username: '', email: '' }
+  if (!selectedJob.value.provider) selectedJob.value.provider = { username: "", email: "" }
   visible.value = true
   try {
     const res = await ApiService.get(`/jobApplicants/findApplicantsByJobId/${job.id}`)
     applicants.value = res.data
   } catch (err) {
-    console.error('Error fetching applicants:', err)
+    console.error("Error fetching applicants:", err)
     applicants.value = []
   }
 }
 
-const openEditDialog = job => {
+const openEditDialog = (job) => {
   editingJob.value = { ...job }
   editDialogVisible.value = true
 }
@@ -316,52 +334,40 @@ const openEditDialog = job => {
 const updateJob = async () => {
   try {
     await ApiService.put(`/jobDetail/updateJobDetail`, editingJob.value)
-    toast.add({ severity: 'success', summary: 'Success', detail: 'Job updated', life: 3000 })
+    toast.add({ severity: "success", summary: "Success", detail: "Job updated", life: 3000 })
     editDialogVisible.value = false
     fetchJobs()
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to update job', life: 3000 })
+  } catch {
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to update job", life: 3000 })
   }
 }
 
-const confirmDelete = job => {
+const confirmDelete = (job) => {
   jobToDelete.value = { ...job }
   deleteDialogVisible.value = true
 }
-
 const deleteJob = async () => {
   try {
     await ApiService.delete(`/jobDetail/delete/${jobToDelete.value.id}`)
-    toast.add({ severity: 'success', summary: 'Deleted', detail: 'Job deleted', life: 3000 })
+    toast.add({ severity: "success", summary: "Deleted", detail: "Job deleted", life: 3000 })
     deleteDialogVisible.value = false
     fetchJobs()
-  } catch (err) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete job', life: 3000 })
+  } catch {
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to delete job", life: 3000 })
   }
 }
-const applicantEducation = ref([])
-const applicantCertifications = ref([])
-const applicantExperience = ref([])
-
 
 const viewResume = async (applicant) => {
   try {
-    // Fetch applicant details
     const res = await ApiService.get(`/jobApplicants/findById/${applicant.id}`)
     selectedApplicant.value = res.data
-
     const resumeId = selectedApplicant.value.resume?.id
 
     if (resumeId) {
-      // Education
       const eduRes = await ApiService.get(`/education/findByResumeId/${resumeId}`)
       applicantEducation.value = eduRes.data || []
-
-      // Certifications
       const certRes = await ApiService.get(`/certification/findByResumeId/${resumeId}`)
       applicantCertifications.value = certRes.data || []
-
-      // Experiences
       const expRes = await ApiService.get(`/resumeExperiences/findByResumeId/${resumeId}`)
       applicantExperience.value = expRes.data || []
     } else {
@@ -369,14 +375,59 @@ const viewResume = async (applicant) => {
       applicantCertifications.value = []
       applicantExperience.value = []
     }
-
-    // Open dialog
     applicantDialogVisible.value = true
-  } catch (err) {
-    console.error('Error fetching applicant details:', err)
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to load applicant details', life: 3000 })
+  } catch {
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to load applicant details", life: 3000 })
   }
 }
 
+// ---------------------- STATUS MANAGEMENT -------------------------
+const updateApplicantStatus = async (applicant, status, successMsg) => {
+  try {
+    await ApiService.put(`/jobApplicants/update`, { ...applicant, status })
+    toast.add({ severity: "success", summary: successMsg, detail: `Application ${status}`, life: 3000 })
+    if (selectedJob.value) {
+      const res = await ApiService.get(`/jobApplicants/findApplicantsByJobId/${selectedJob.value.id}`)
+      applicants.value = res.data
+    }
+  } catch {
+    toast.add({ severity: "error", summary: "Error", detail: `Failed to set ${status}`, life: 3000 })
+  }
+}
 
+// Approve
+const confirmApprove = (a) => {
+  applicantToApprove.value = a
+  approveDialogVisible.value = true
+}
+const approveApplicant = () => {
+  if (applicantToApprove.value) {
+    updateApplicantStatus(applicantToApprove.value, "accepted", "Approved")
+    approveDialogVisible.value = false
+  }
+}
+
+// Review
+const confirmReview = (a) => {
+  applicantToReview.value = a
+  reviewDialogVisible.value = true
+}
+const reviewApplicant = () => {
+  if (applicantToReview.value) {
+    updateApplicantStatus(applicantToReview.value, "reviewing", "Reviewing")
+    reviewDialogVisible.value = false
+  }
+}
+
+// Reject
+const confirmReject = (a) => {
+  applicantToReject.value = a
+  rejectDialogVisible.value = true
+}
+const rejectApplicant = () => {
+  if (applicantToReject.value) {
+    updateApplicantStatus(applicantToReject.value, "rejected", "Rejected")
+    rejectDialogVisible.value = false
+  }
+}
 </script>

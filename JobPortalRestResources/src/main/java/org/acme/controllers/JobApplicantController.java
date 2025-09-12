@@ -59,4 +59,13 @@ public class JobApplicantController {
             return  jobApplicants;
         }
     }
+
+    @Transactional
+    public void udpateApplicant(JobApplicants jobApplicants){
+        try{
+            jobApplicantfacade.edit(jobApplicants);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

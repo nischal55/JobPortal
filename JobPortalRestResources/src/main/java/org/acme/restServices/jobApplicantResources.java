@@ -45,4 +45,10 @@ public class jobApplicantResources {
         return jobApplicationBean.findApplicantsByJobId(jobId);
     }
 
+    @PUT
+    @Path("/update")
+    public Response udpate(JobApplicants jobApplicants){
+        return jobApplicationBean.updateJobApplicant(jobApplicants);
+    }
+
 }

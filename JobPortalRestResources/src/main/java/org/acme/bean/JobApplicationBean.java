@@ -57,4 +57,13 @@ public class JobApplicationBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("No Record Found").build();
         }
     }
+
+    public Response updateJobApplicant(JobApplicants jobApplicants){
+        try{
+            jobApplicantController.udpateApplicant(jobApplicants);
+            return Response.status(Response.Status.ACCEPTED).entity("Updated Successfully").build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Update Failed").build();
+        }
+    }
 }
