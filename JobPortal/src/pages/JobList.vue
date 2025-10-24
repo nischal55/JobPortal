@@ -189,6 +189,73 @@
       <Button label="Close" class="p-button-text" @click="rankedDialogVisible = false" />
     </template>
   </Dialog>
+
+  <!-- Edit Job Dialog -->
+  <Dialog v-model:visible="editDialogVisible" modal header="Update Job" :style="{ width: '45rem' }" class="p-4">
+    <form @submit.prevent="updateJob" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Job Title</label>
+        <InputText v-model="editJob.title" placeholder="e.g. Software Engineer" class="w-full" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Description</label>
+        <Editor 
+          v-model="editJob.description" 
+          editorStyle="height: 150px" 
+          class="w-full"
+          :modules="{ toolbar: true }"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Location</label>
+        <InputText v-model="editJob.location" placeholder="e.g. Kathmandu, Nepal" class="w-full" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Salary Range</label>
+        <InputText v-model="editJob.salaryRange" placeholder="e.g. 50000 - 80000 NPR" class="w-full" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Job Type</label>
+        <Dropdown v-model="editJob.type" :options="types" placeholder="Select job type" class="w-full" />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Requirements</label>
+        <Editor 
+          v-model="editJob.requirements" 
+          editorStyle="height: 120px" 
+          class="w-full"
+          :modules="{ toolbar: true }"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium mb-1">Deadline</label>
+        <input type="date" v-model="editJob.deadline" class="w-full border border-gray-300 rounded px-3 py-2" />
+      </div>
+
+      <div class="flex justify-end gap-3 mt-5">
+        <Button label="Cancel" severity="secondary" @click="editDialogVisible = false" />
+        <Button label="Update" type="submit" />
+      </div>
+    </form>
+  </Dialog>
+
+  <!-- Delete Confirmation Dialog -->
+  <Dialog v-model:visible="deleteDialogVisible" modal header="Confirm Delete" :style="{ width: '25rem' }">
+    <div class="confirmation-content">
+      <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem" />
+      <span>Are you sure you want to delete this job?</span>
+    </div>
+    <template #footer>
+      <Button label="No" icon="pi pi-times" class="p-button-text" @click="deleteDialogVisible = false" />
+      <Button label="Yes" icon="pi pi-check" class="p-button-danger" @click="deleteJob" />
+    </template>
+  </Dialog>
 </template>
 
 <script setup>
@@ -207,29 +274,69 @@ import Dialog from "primevue/dialog"
 import Avatar from "primevue/avatar"
 import Tag from "primevue/tag"
 import Toast from "primevue/toast"
+import Dropdown from 'primevue/dropdown'
+import Editor from 'primevue/editor'
 import { useToast } from "primevue/usetoast"
+import axios from "axios"
 
 const toast = useToast()
 const router = useRouter()
 
+// ---------------- STATE ----------------
 const jobs = ref([])
 const applicants = ref([])
 const applicantResumes = ref([])
 const rankedApplicants = ref([])
+
 const loading = ref(false)
-const visible = ref(false)
+const visible = ref(false) // Job details dialog
 const applicantDialogVisible = ref(false)
 const rankedDialogVisible = ref(false)
+const editDialogVisible = ref(false) // Edit job dialog
+const deleteDialogVisible = ref(false) // Delete confirmation dialog
 
 const selectedJob = ref(null)
 const selectedApplicant = ref(null)
 const applicantEducation = ref([])
 const applicantCertifications = ref([])
 const applicantExperience = ref([])
+const jobToDelete = ref(null)
 
+const editJob = ref({
+  id: null,
+  title: "",
+  description: "",
+  location: "",
+  salaryRange: "",
+  type: "",
+  requirements: "",
+  deadline: ""
+})
+
+const types = ["full_time", "part_time", "internship", "contract"]
 const user_id = localStorage.getItem("user_id")
 
-const FilterMatchMode = { CONTAINS: "contains" }
+// ---------------- FILTERS ----------------
+// Define FilterMatchMode locally if import fails
+const FilterMatchMode = {
+  STARTS_WITH: 'startsWith',
+  CONTAINS: 'contains',
+  NOT_CONTAINS: 'notContains',
+  ENDS_WITH: 'endsWith',
+  EQUALS: 'equals',
+  NOT_EQUALS: 'notEquals',
+  IN: 'in',
+  LESS_THAN: 'lt',
+  LESS_THAN_OR_EQUAL_TO: 'lte',
+  GREATER_THAN: 'gt',
+  GREATER_THAN_OR_EQUAL_TO: 'gte',
+  BETWEEN: 'between',
+  DATE_IS: 'dateIs',
+  DATE_IS_NOT: 'dateIsNot',
+  DATE_BEFORE: 'dateBefore',
+  DATE_AFTER: 'dateAfter'
+}
+
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
   title: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -241,6 +348,7 @@ const filters = ref({
   requirements: { value: null, matchMode: FilterMatchMode.CONTAINS },
 })
 
+// ---------------- FETCH JOBS ----------------
 const fetchJobs = async () => {
   loading.value = true
   try {
@@ -248,21 +356,48 @@ const fetchJobs = async () => {
     jobs.value = res.data
   } catch (err) {
     console.error("Error fetching jobs:", err)
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to load jobs", life: 3000 })
   } finally {
     loading.value = false
   }
 }
-onMounted(fetchJobs)
 
+onMounted(() => {
+  fetchJobs()
+})
+
+// ---------------- UTILS ----------------
 const clearFilter = () => {
-  Object.keys(filters.value).forEach((key) => (filters.value[key].value = null))
+  Object.keys(filters.value).forEach(key => (filters.value[key].value = null))
 }
 
 const formatDate = (d) => (d ? new Date(d).toLocaleDateString() : "")
+
 const formatDateTime = (d) => (d ? new Date(d).toLocaleString() : "")
 
 const openAddJob = () => router.push({ name: "jobCreateForm" })
 
+// ---------------- JOB DETAILS DIALOG ----------------
+const openDialog = async (job) => {
+  selectedJob.value = JSON.parse(JSON.stringify(job))
+  if (!selectedJob.value.provider) selectedJob.value.provider = { username: "", email: "" }
+  visible.value = true
+
+  try {
+    const res = await ApiService.get(`/jobApplicants/findApplicantsByJobId/${job.id}`)
+    applicants.value = res.data
+
+    const resumeData = await Promise.all(applicants.value.map(fetchApplicantResumeData))
+    applicantResumes.value = resumeData.filter(a => a !== null)
+  } catch (err) {
+    console.error("Error fetching applicants:", err)
+    applicants.value = []
+    applicantResumes.value = []
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to load applicants", life: 3000 })
+  }
+}
+
+// ---------------- FETCH RESUME DETAILS ----------------
 const fetchApplicantResumeData = async (applicant) => {
   try {
     const res = await ApiService.get(`/jobApplicants/findById/${applicant.id}`)
@@ -294,25 +429,7 @@ const fetchApplicantResumeData = async (applicant) => {
   }
 }
 
-const openDialog = async (job) => {
-  selectedJob.value = JSON.parse(JSON.stringify(job))
-  if (!selectedJob.value.provider) selectedJob.value.provider = { username: "", email: "" }
-  visible.value = true
-
-  try {
-    const res = await ApiService.get(`/jobApplicants/findApplicantsByJobId/${job.id}`)
-    applicants.value = res.data
-
-    // Preload all applicant resumes
-    const resumeData = await Promise.all(applicants.value.map(fetchApplicantResumeData))
-    applicantResumes.value = resumeData.filter(a => a !== null)
-  } catch (err) {
-    console.error("Error fetching applicants:", err)
-    applicants.value = []
-    applicantResumes.value = []
-  }
-}
-
+// ---------------- VIEW APPLICANT RESUME ----------------
 const viewResume = async (applicant) => {
   try {
     const res = await ApiService.get(`/jobApplicants/findById/${applicant.id}`)
@@ -358,9 +475,53 @@ const confirmApprove = (applicant) => updateApplicantStatus(applicant, "accepted
 const confirmReject = (applicant) => updateApplicantStatus(applicant, "rejected", "Rejected")
 const confirmReview = (applicant) => updateApplicantStatus(applicant, "reviewing", "In Review")
 
-// ---------------- AI RANKING ----------------
-import axios from "axios"
+// ---------------- EDIT JOB ----------------
+const openEditDialog = (job) => {
+  console.log("Editing job:", job)
+  editJob.value = { 
+    ...job,
+    description: job.description || "",
+    requirements: job.requirements || "",
+    deadline: job.deadline ? new Date(job.deadline).toISOString().split('T')[0] : ""
+  }
+  console.log("Edit job data:", editJob.value)
+  editDialogVisible.value = true
+}
 
+const updateJob = async () => {
+  try {
+    await ApiService.put(`/jobDetail/updateJobDetail`, editJob.value)
+    toast.add({ severity: "success", summary: "Success", detail: "Job updated successfully", life: 3000 })
+    editDialogVisible.value = false
+    await fetchJobs()
+  } catch (err) {
+    console.error("Failed to update job:", err)
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to update job", life: 3000 })
+  }
+}
+
+// ---------------- DELETE JOB ----------------
+const confirmDelete = (job) => {
+  jobToDelete.value = job
+  deleteDialogVisible.value = true
+}
+
+const deleteJob = async () => {
+  if (!jobToDelete.value) return
+
+  try {
+    await ApiService.delete(`/jobDetail/delete/${jobToDelete.value.id}`)
+    toast.add({ severity: "success", summary: "Success", detail: "Job deleted successfully", life: 3000 })
+    deleteDialogVisible.value = false
+    jobToDelete.value = null
+    await fetchJobs()
+  } catch (err) {
+    console.error("Failed to delete job:", err)
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to delete job", life: 3000 })
+  }
+}
+
+// ---------------- AI RANKING ----------------
 const rankWithAI = async () => {
   if (!selectedJob.value || !applicantResumes.value.length) {
     return toast.add({ severity: "warn", summary: "No data", detail: "No applicants to rank", life: 3000 })
@@ -386,8 +547,7 @@ const rankWithAI = async () => {
 
     toast.add({ severity: "info", summary: "Ranking...", detail: "Sending data to AI API", life: 3000 })
 
-    // Direct Axios call to Flask API
-    const res = await axios.post("http://localhost:5000/rank_applicants", payload) // replace URL if needed
+    const res = await axios.post("http://localhost:5000/rank_applicants", payload)
 
     rankedApplicants.value = res.data.map((r) => {
       const app = applicantResumes.value.find(a => a.id === r.applicantId)
@@ -406,5 +566,19 @@ const rankWithAI = async () => {
     toast.add({ severity: "error", summary: "Error", detail: "Failed to rank applicants", life: 3000 })
   }
 }
-
 </script>
+
+<style scoped>
+.card {
+  background: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.confirmation-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+</style>

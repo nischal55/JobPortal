@@ -54,4 +54,12 @@ public class JobSeekerController {
             e.printStackTrace();
         }
     }
+
+    public Long findJobSeekerCount(){
+        try{
+            return jobSeekerDetailFacade.findJobSeekerCount();
+        }catch(Exception e){
+            return null;
+        }
+    }
 }

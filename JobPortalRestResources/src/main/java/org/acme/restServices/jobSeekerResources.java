@@ -44,4 +44,10 @@ public class jobSeekerResources {
     public Response update(JobSeekerDetail jobSeekerDetail){
         return jobSeekerBean.updateJobSeeker(jobSeekerDetail);
     }
+
+    @GET
+    @Path("/getJobSeekerCount")
+    public Response findJobSeekerCount(){
+        return jobSeekerBean.findJobSeekerCount();
+    }
 }

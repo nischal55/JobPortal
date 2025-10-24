@@ -77,4 +77,13 @@ public class JobDetailBean {
             return Response.status(Response.Status.BAD_REQUEST).entity("Failed to delete").build();
         }
     }
+
+    public Response findJobCount(){
+        try{
+            Long jobCount = jobDetailController.findJobCount();
+            return Response.status(Response.Status.ACCEPTED).entity(jobCount).build();
+        }catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to Fetch job count").build();
+        }
+    }
 }

@@ -211,4 +211,9 @@ public class JobDetailFacade extends AbstractFacade<JobDetail> {
             return null;
         }
     }
+
+    public Long findJobCount(){
+        String jpql = "SELECT COUNT(j.id) FROM JobDetail j";
+        return em.createQuery(jpql, Long.class).getSingleResult();
+    }
 }

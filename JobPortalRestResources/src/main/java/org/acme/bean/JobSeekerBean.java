@@ -57,4 +57,13 @@ public class JobSeekerBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Update Failed").build();
         }
     }
+
+    public Response findJobSeekerCount(){
+        try {
+            Long count =  jobSeekerController.findJobSeekerCount();
+            return Response.status(Response.Status.ACCEPTED).entity(count).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to fetch Job Seeker Count").build();
+        }
+    }
 }

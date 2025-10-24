@@ -32,4 +32,9 @@ public class JobSeekerDetailFacade extends AbstractFacade<JobSeekerDetail>{
            return  null;
        }
     }
+
+    public Long findJobSeekerCount(){
+        String jpql = "SELECT COUNT(j.id) FROM JobSeekerDetail j";
+        return em.createQuery(jpql, Long.class).getSingleResult();
+    }
 }

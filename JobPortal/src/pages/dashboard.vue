@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import ApiService from '@/services/ApiService';
+import ApiService from '@/services/ApiService'
 import AdminNav from '@/components/AdminNav.vue'
 import Sidebar from '@/components/Sidebar.vue'
 
@@ -81,7 +81,7 @@ ChartJS.register(
 const DoughnutChart = Doughnut
 const LineChart = Line
 
-// Top Stats Cards (default values)
+// ---------- Default Dashboard Stats ----------
 const statsCards = ref([
   { title: 'Job Providers', value: 0, trend: 5.2, icon: 'pi pi-address-book' },
   { title: 'Job Seekers', value: 0, trend: 8.4, icon: 'pi pi-users' },
@@ -89,57 +89,33 @@ const statsCards = ref([
   { title: 'Jobs Posted', value: 0, trend: 6.7, icon: 'pi pi-briefcase' },
 ])
 
-// ✅ Fetch counts using ApiService
-const fetchDashboardCounts = async () => {
-  try {
-    const [applicantsRes, providersRes] = await Promise.all([
-      ApiService.get('/jobApplicants/getApplicantsCount'),
-      ApiService.get('/jobproviders/getJobProviderCount')
-    ])
-
-    // Assuming each API returns a numeric count
-    const applicantsCount = applicantsRes.data
-    const providersCount = providersRes.data
-
-    // Update stats
-    statsCards.value = statsCards.value.map(card => {
-      if (card.title === 'Applicants') return { ...card, value: applicantsCount }
-      if (card.title === 'Job Providers') return { ...card, value: providersCount }
-      return card
-    })
-  } catch (error) {
-    console.error('Failed to fetch dashboard stats:', error)
-  }
-}
-
-onMounted(fetchDashboardCounts)
-
-// Chart Data
+// ---------- Chart Data (Reactive) ----------
 const applicationChartData = ref({
-  labels: ['Accepted', 'Pending', 'Rejected'],
+  labels: ['Applicants', 'Job Providers', 'Job Seekers', 'Jobs Posted'],
   datasets: [
     {
-      data: [320, 420, 150],
-      backgroundColor: ['#10b981', '#facc15', '#ef4444'],
+      data: [0, 0, 0, 0],
+      backgroundColor: ['#10b981', '#3b82f6', '#facc15', '#ef4444'],
       hoverOffset: 8,
     },
   ],
 })
 
 const jobChartData = ref({
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+  labels: ['Applicants', 'Providers', 'Seekers', 'Jobs'],
   datasets: [
     {
-      label: 'Jobs Posted',
-      data: [30, 50, 45, 70, 60, 80, 65, 90],
+      label: 'Platform Statistics',
+      data: [0, 0, 0, 0],
       borderColor: '#039e27',
-      backgroundColor: '#039e27',
+      backgroundColor: 'rgba(3, 158, 39, 0.4)',
       fill: true,
       tension: 0.3,
     },
   ],
 })
 
+// ---------- Chart Options ----------
 const chartOptions = ref({
   responsive: true,
   plugins: {
@@ -153,4 +129,62 @@ const chartOptions = ref({
     y: { ticks: { color: '#6b7280' } },
   },
 })
+
+// ---------- Fetch Data from API ----------
+const fetchDashboardCounts = async () => {
+  try {
+    const [applicantsRes, providersRes, seekerRes, jobRes] = await Promise.all([
+      ApiService.get('/jobApplicants/getApplicantsCount'),
+      ApiService.get('/jobproviders/getJobProviderCount'),
+      ApiService.get('/jobseeker/getJobSeekerCount'),
+      ApiService.get('/jobDetail/findJobCount')
+    ])
+
+    // Extract numeric counts (assuming plain integer responses)
+    const applicantsCount = applicantsRes.data
+    const providersCount = providersRes.data
+    const seekerCount = seekerRes.data
+    const jobCount = jobRes.data
+
+    // Update Top Stats
+    statsCards.value = statsCards.value.map(card => {
+      if (card.title === 'Applicants') return { ...card, value: applicantsCount }
+      if (card.title === 'Job Providers') return { ...card, value: providersCount }
+      if (card.title === 'Job Seekers') return { ...card, value: seekerCount }
+      if (card.title === 'Jobs Posted') return { ...card, value: jobCount }
+      return card
+    })
+
+    // ---------- Update Chart Data Based on Counts ----------
+    applicationChartData.value = {
+      labels: ['Applicants', 'Job Providers', 'Job Seekers', 'Jobs Posted'],
+      datasets: [
+        {
+          data: [applicantsCount, providersCount, seekerCount, jobCount],
+          backgroundColor: ['#10b981', '#3b82f6', '#facc15', '#ef4444'],
+          hoverOffset: 8,
+        },
+      ],
+    }
+
+    jobChartData.value = {
+      labels: ['Applicants', 'Providers', 'Seekers', 'Jobs'],
+      datasets: [
+        {
+          label: 'Platform Statistics',
+          data: [applicantsCount, providersCount, seekerCount, jobCount],
+          borderColor: '#039e27',
+          backgroundColor: 'rgba(3, 158, 39, 0.4)',
+          fill: true,
+          tension: 0.3,
+        },
+      ],
+    }
+  } catch (error) {
+    console.error('Failed to fetch dashboard stats:', error)
+  }
+}
+
+// Fetch data when component mounts
+onMounted(fetchDashboardCounts)
 </script>

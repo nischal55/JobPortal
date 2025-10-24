@@ -60,4 +60,10 @@ public class jobDetailResources {
         JobDetail jobDetail = jobDetailController.findById(id);
         return jobDetailBean.deleteJob(jobDetail);
     }
+
+    @GET
+    @Path("/findJobCount")
+    public Response findJobCount(){
+        return jobDetailBean.findJobCount();
+    }
 }

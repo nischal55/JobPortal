@@ -71,4 +71,12 @@ public class JobDetailController {
             e.printStackTrace();
         }
     }
+
+    public Long findJobCount(){
+        try{
+            return jobDetailFacade.findJobCount();
+        }catch (Exception e){
+            return null;
+        }
+    }
 }
