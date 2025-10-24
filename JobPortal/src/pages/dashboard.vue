@@ -49,115 +49,108 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import ApiService from '@/services/ApiService';
 import AdminNav from '@/components/AdminNav.vue'
 import Sidebar from '@/components/Sidebar.vue'
 
 import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement,
-    LineElement,
-    PointElement,
-    CategoryScale,
-    LinearScale
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale
 } from 'chart.js'
 import { Doughnut, Line } from 'vue-chartjs'
 
 ChartJS.register(
-    Title,
-    Tooltip,
-    Legend,
-    ArcElement,
-    LineElement,
-    PointElement,
-    CategoryScale,
-    LinearScale
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale
 )
 
-// Chart Components
 const DoughnutChart = Doughnut
 const LineChart = Line
 
-// Top Stats Cards
+// Top Stats Cards (default values)
 const statsCards = ref([
-    { title: 'Job Providers', value: '245', trend: 5.2, icon: 'pi pi-address-book' },
-    { title: 'Job Seekers', value: '1,456', trend: 8.4, icon: 'pi pi-users' },
-    { title: 'Applicants', value: '890', trend: 3.1, icon: 'pi pi-list-check' },
-    { title: 'Jobs Posted', value: '320', trend: 6.7, icon: 'pi pi-briefcase' },
+  { title: 'Job Providers', value: 0, trend: 5.2, icon: 'pi pi-address-book' },
+  { title: 'Job Seekers', value: 0, trend: 8.4, icon: 'pi pi-users' },
+  { title: 'Applicants', value: 0, trend: 3.1, icon: 'pi pi-list-check' },
+  { title: 'Jobs Posted', value: 0, trend: 6.7, icon: 'pi pi-briefcase' },
 ])
 
-// ✅ Make chart data reactive
+// ✅ Fetch counts using ApiService
+const fetchDashboardCounts = async () => {
+  try {
+    const [applicantsRes, providersRes] = await Promise.all([
+      ApiService.get('/jobApplicants/getApplicantsCount'),
+      ApiService.get('/jobproviders/getJobProviderCount')
+    ])
+
+    // Assuming each API returns a numeric count
+    const applicantsCount = applicantsRes.data
+    const providersCount = providersRes.data
+
+    // Update stats
+    statsCards.value = statsCards.value.map(card => {
+      if (card.title === 'Applicants') return { ...card, value: applicantsCount }
+      if (card.title === 'Job Providers') return { ...card, value: providersCount }
+      return card
+    })
+  } catch (error) {
+    console.error('Failed to fetch dashboard stats:', error)
+  }
+}
+
+onMounted(fetchDashboardCounts)
+
+// Chart Data
 const applicationChartData = ref({
-    labels: ['Accepted', 'Pending', 'Rejected'],
-    datasets: [
-        {
-            data: [320, 420, 150],
-            backgroundColor: ['#10b981', '#facc15', '#ef4444'],
-            hoverOffset: 8,
-        },
-    ],
+  labels: ['Accepted', 'Pending', 'Rejected'],
+  datasets: [
+    {
+      data: [320, 420, 150],
+      backgroundColor: ['#10b981', '#facc15', '#ef4444'],
+      hoverOffset: 8,
+    },
+  ],
 })
 
 const jobChartData = ref({
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
-    datasets: [
-        {
-            label: 'Jobs Posted',
-            data: [30, 50, 45, 70, 60, 80, 65, 90],
-            borderColor: '#039e27',
-            backgroundColor: '#039e27',
-            fill: true,
-            tension: 0.3,
-        },
-    ],
+  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+  datasets: [
+    {
+      label: 'Jobs Posted',
+      data: [30, 50, 45, 70, 60, 80, 65, 90],
+      borderColor: '#039e27',
+      backgroundColor: '#039e27',
+      fill: true,
+      tension: 0.3,
+    },
+  ],
 })
 
 const chartOptions = ref({
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'bottom',
-            labels: { color: '#6b7280' },
-        },
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'bottom',
+      labels: { color: '#6b7280' },
     },
-    scales: {
-        x: { ticks: { color: '#6b7280' } },
-        y: { ticks: { color: '#6b7280' } },
-    },
+  },
+  scales: {
+    x: { ticks: { color: '#6b7280' } },
+    y: { ticks: { color: '#6b7280' } },
+  },
 })
-
-// Applications
-const applications = ref([
-    {
-        name: 'John Doe',
-        avatar: 'https://i.pravatar.cc/30?u=john',
-        job: 'Frontend Developer',
-        date: '21/07/2022 08:21',
-        status: 'Accepted',
-    },
-    {
-        name: 'Jane Smith',
-        avatar: 'https://i.pravatar.cc/30?u=jane',
-        job: 'UI/UX Designer',
-        date: '22/07/2022 10:15',
-        status: 'Pending',
-    },
-    {
-        name: 'Alex Johnson',
-        avatar: 'https://i.pravatar.cc/30?u=alex',
-        job: 'Backend Developer',
-        date: '23/07/2022 11:00',
-        status: 'Rejected',
-    },
-    {
-        name: 'Emily Brown',
-        avatar: 'https://i.pravatar.cc/30?u=emily',
-        job: 'Project Manager',
-        date: '23/07/2022 12:45',
-        status: 'Pending',
-    },
-])
 </script>
