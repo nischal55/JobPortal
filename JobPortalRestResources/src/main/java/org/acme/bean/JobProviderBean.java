@@ -31,4 +31,13 @@ public class JobProviderBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to fetch job providers").build();
         }
     }
+
+    public Response findJobProviderCount(){
+        try{
+            Long providerCount = jobProviderController.findJobProviderCount();
+            return Response.status(Response.Status.ACCEPTED).entity(providerCount).build();
+        }catch(Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to fetch job providers count").build();
+        }
+    }
 }

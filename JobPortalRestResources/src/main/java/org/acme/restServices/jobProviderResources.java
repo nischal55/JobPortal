@@ -26,4 +26,10 @@ public class jobProviderResources {
     public Response findAll(){
         return jobProviderBean.findAll();
     }
+
+    @GET
+    @Path("/getJobProviderCount")
+    public Response findProviderCount(){
+        return jobProviderBean.findJobProviderCount();
+    }
 }

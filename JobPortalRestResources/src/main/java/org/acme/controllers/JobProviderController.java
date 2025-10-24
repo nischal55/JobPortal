@@ -37,4 +37,12 @@ public class JobProviderController {
             return null;
         }
     }
+
+    public Long findJobProviderCount(){
+        try{
+            return jobProviderDetailFacade.findJobProviderCount();
+        }catch(Exception e){
+            return null;
+        }
+    }
 }

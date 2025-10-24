@@ -48,4 +48,9 @@ public class JobApplicantfacade extends AbstractFacade<JobApplicants>{
             return jobApplicants;
         }
     }
+
+    public Long findApplicantsCount(){
+        String jpql = "SELECT COUNT(j.id) FROM JobApplicants j";
+        return em.createQuery(jpql, Long.class).getSingleResult();
+    }
 }

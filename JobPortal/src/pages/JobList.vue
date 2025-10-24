@@ -11,18 +11,10 @@
             <Button label="Add Job" icon="pi pi-plus" class="p-button-sm" @click="openAddJob" />
           </div>
 
-          <DataTable
-            :value="jobs"
-            v-model:filters="filters"
-            dataKey="id"
-            paginator
-            :rows="10"
-            :loading="loading"
-            showGridlines
-            filterDisplay="menu"
+          <DataTable :value="jobs" v-model:filters="filters" dataKey="id" paginator :rows="10" :loading="loading"
+            showGridlines filterDisplay="menu"
             :globalFilterFields="['title', 'provider.username', 'type', 'location', 'salaryRange', 'description', 'requirements']"
-            class="text-sm"
-          >
+            class="text-sm">
             <template #header>
               <div class="flex justify-between items-center">
                 <Button icon="pi pi-filter-slash" label="Clear" outlined @click="clearFilter" />
@@ -65,8 +57,10 @@
               <template #body="{ data }">
                 <div class="flex gap-2">
                   <Button icon="pi pi-eye" class="p-button-sm" title="View Applicants" @click="openDialog(data)" />
-                  <Button icon="pi pi-pencil" class="p-button-sm p-button-warning" title="Edit Job" @click="openEditDialog(data)" />
-                  <Button icon="pi pi-trash" class="p-button-sm p-button-danger" title="Delete Job" @click="confirmDelete(data)" />
+                  <Button icon="pi pi-pencil" class="p-button-sm p-button-warning" title="Edit Job"
+                    @click="openEditDialog(data)" />
+                  <Button icon="pi pi-trash" class="p-button-sm p-button-danger" title="Delete Job"
+                    @click="confirmDelete(data)" />
                 </div>
               </template>
             </Column>
@@ -103,23 +97,27 @@
       <Column field="appliedAt" header="Applied On"><template #body="{ data }">{{ formatDateTime(data.appliedAt) }}</template></Column>
       <Column field="status" header="Status">
         <template #body="{ data }">
-          <Tag :value="data.status" :severity="data.status === 'applied' ? 'warn' : data.status === 'reviewing' ? 'info' : data.status === 'accepted' ? 'success' : 'danger'" />
+          <Tag :value="data.status"
+            :severity="data.status === 'applied' ? 'warn' : data.status === 'reviewing' ? 'info' : data.status === 'accepted' ? 'success' : 'danger'" />
         </template>
       </Column>
       <Column field="Action" class="w-20" header="Action">
         <template #body="{ data }">
           <div class="flex gap-2">
             <Button icon="pi pi-eye" class="p-button-sm" title="View Applicant Detail" @click="viewResume(data)" />
-            <Button icon="pi pi-arrow-circle-right" class="p-button-sm" :disabled="data.status !== 'applied'" title="Review Applicant" @click="confirmReview(data)" />
-            <Button icon="pi pi-check" class="p-button-sm" :disabled="data.status !== 'reviewing'" title="Approve Applicant" @click="confirmApprove(data)" />
-            <Button icon="pi pi-times" class="p-button-sm p-button-danger" :disabled="data.status !== 'reviewing'" title="Reject Applicant" @click="confirmReject(data)" />
+            <Button icon="pi pi-arrow-circle-right" class="p-button-sm" :disabled="data.status !== 'applied'"
+              title="Review Applicant" @click="confirmReview(data)" />
+            <Button icon="pi pi-check" class="p-button-sm" :disabled="data.status !== 'reviewing'"
+              title="Approve Applicant" @click="confirmApprove(data)" />
+            <Button icon="pi pi-times" class="p-button-sm p-button-danger" :disabled="data.status !== 'reviewing'"
+              title="Reject Applicant" @click="confirmReject(data)" />
           </div>
         </template>
       </Column>
     </DataTable>
 
     <template #footer>
-      <Button label="Rank With AI" variant="outlined" severity="secondary" />
+      <Button label="Rank With AI" variant="outlined" severity="secondary" @click="rankWithAI" />
     </template>
   </Dialog>
 
@@ -127,7 +125,8 @@
   <Dialog v-model:visible="applicantDialogVisible" modal header="Applicant Detail" :style="{ width: '45rem' }" class="p-4">
     <div v-if="selectedApplicant" class="space-y-5">
       <div class="flex items-center gap-4 border-b border-slate-400 pb-3">
-        <Avatar :image="selectedApplicant?.seeker?.user?.profileImage || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'" shape="circle" size="xlarge" class="border border-gray-200 shadow-sm" />
+        <Avatar :image="selectedApplicant?.seeker?.user?.profileImage || 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png'"
+                shape="circle" size="xlarge" class="border border-gray-200 shadow-sm" />
         <div>
           <h2 class="font-bold text-xl">{{ selectedApplicant?.seeker?.user?.username }}</h2>
           <p class="text-gray-500">{{ selectedApplicant?.seeker?.user?.email }}</p>
@@ -135,7 +134,6 @@
         </div>
       </div>
 
-      <!-- Resume sections -->
       <div class="bg-gray-50 p-3 rounded shadow-sm">
         <h4 class="font-semibold text-md mb-1">Resume Summary</h4>
         <p class="text-gray-700">{{ selectedApplicant?.seeker?.summary || 'N/A' }}</p>
@@ -178,53 +176,17 @@
     </template>
   </Dialog>
 
-  <!-- Edit, Delete, Approve, Review, Reject dialogs -->
-  <Dialog v-model:visible="editDialogVisible" modal header="Edit Job" :style="{ width: '50rem' }">
-    <!-- form -->
-    <div class="space-y-4">
-      <div><label class="block mb-1">Title</label><InputText v-model="editingJob.title" class="w-full" /></div>
-      <div><label class="block mb-1">Description</label><Editor v-model="editingJob.description" class="w-full" editorStyle="height: 150px" /></div>
-      <div><label class="block mb-1">Location</label><InputText v-model="editingJob.location" class="w-full" /></div>
-      <div><label class="block mb-1">Salary</label><InputText v-model="editingJob.salaryRange" class="w-full" /></div>
-      <div><label class="block mb-1">Job Type</label><Dropdown v-model="editingJob.type" :options="types" class="w-full" /></div>
-      <div><label class="block mb-1">Requirements</label><Editor v-model="editingJob.requirements" class="w-full" editorStyle="height: 150px" /></div>
-      <div><label class="block mb-1">Deadline</label><input type="date" v-model="editingJob.deadline" class="w-full border rounded px-3 py-2" /></div>
-    </div>
-    <template #footer>
-      <Button label="Cancel" class="p-button-text" @click="editDialogVisible = false" />
-      <Button label="Update Job" class="p-button-primary" @click="updateJob" />
-    </template>
-  </Dialog>
+  <!-- Ranked Applicants Dialog -->
+  <Dialog v-model:visible="rankedDialogVisible" modal header="Ranked Applicants" :style="{ width: '50rem' }">
+    <DataTable :value="rankedApplicants" dataKey="id" paginator :rows="5" showGridlines class="text-sm">
+      <Column header="Rank"><template #body="{ index }">{{ index + 1 }}</template></Column>
+      <Column field="username" header="Name"><template #body="{ data }">{{ data.username }}</template></Column>
+      <Column field="summary" header="Summary"><template #body="{ data }">{{ data.summary || 'N/A' }}</template></Column>
+      <Column field="aiScore" header="AI Score"><template #body="{ data }">{{ data.aiScore.toFixed(2) }}</template></Column>
+    </DataTable>
 
-  <Dialog v-model:visible="deleteDialogVisible" modal header="Confirm Delete" :style="{ width: '30rem' }">
-    <div class="text-center text-slate-600 text-lg mb-4">Are you sure you want to delete this job?</div>
     <template #footer>
-      <Button label="Cancel" class="p-button-text" @click="deleteDialogVisible = false" />
-      <Button label="Delete" severity="danger" @click="deleteJob" />
-    </template>
-  </Dialog>
-
-  <Dialog v-model:visible="approveDialogVisible" modal header="Approve Application" :style="{ width: '30rem' }">
-    <div class="text-center text-slate-600 text-lg mb-4">Are you sure you want to Approve this Application?</div>
-    <template #footer>
-      <Button label="Cancel" class="p-button-text" @click="approveDialogVisible = false" />
-      <Button label="Approve" severity="success" @click="approveApplicant" />
-    </template>
-  </Dialog>
-
-  <Dialog v-model:visible="reviewDialogVisible" modal header="Review Application" :style="{ width: '30rem' }">
-    <div class="text-center text-slate-600 text-lg mb-4">Set this Application to <b>Reviewing</b>?</div>
-    <template #footer>
-      <Button label="Cancel" class="p-button-text" @click="reviewDialogVisible = false" />
-      <Button label="Set to Reviewing" severity="warning" @click="reviewApplicant" />
-    </template>
-  </Dialog>
-
-  <Dialog v-model:visible="rejectDialogVisible" modal header="Reject Application" :style="{ width: '30rem' }">
-    <div class="text-center text-slate-600 text-lg mb-4">Are you sure you want to Reject this Application?</div>
-    <template #footer>
-      <Button label="Cancel" class="p-button-text" @click="rejectDialogVisible = false" />
-      <Button label="Reject" severity="danger" @click="rejectApplicant" />
+      <Button label="Close" class="p-button-text" @click="rankedDialogVisible = false" />
     </template>
   </Dialog>
 </template>
@@ -242,8 +204,6 @@ import InputText from "primevue/inputtext"
 import InputIcon from "primevue/inputicon"
 import IconField from "primevue/iconfield"
 import Dialog from "primevue/dialog"
-import Editor from "primevue/editor"
-import Dropdown from "primevue/dropdown"
 import Avatar from "primevue/avatar"
 import Tag from "primevue/tag"
 import Toast from "primevue/toast"
@@ -254,30 +214,20 @@ const router = useRouter()
 
 const jobs = ref([])
 const applicants = ref([])
+const applicantResumes = ref([])
+const rankedApplicants = ref([])
 const loading = ref(false)
 const visible = ref(false)
-const editDialogVisible = ref(false)
-const deleteDialogVisible = ref(false)
 const applicantDialogVisible = ref(false)
-const approveDialogVisible = ref(false)
-const reviewDialogVisible = ref(false)
-const rejectDialogVisible = ref(false)
+const rankedDialogVisible = ref(false)
 
 const selectedJob = ref(null)
-const editingJob = ref({})
-const jobToDelete = ref(null)
 const selectedApplicant = ref(null)
-
-const applicantToApprove = ref(null)
-const applicantToReview = ref(null)
-const applicantToReject = ref(null)
-
 const applicantEducation = ref([])
 const applicantCertifications = ref([])
 const applicantExperience = ref([])
 
 const user_id = localStorage.getItem("user_id")
-const types = ["full_time", "part_time", "internship", "contract"]
 
 const FilterMatchMode = { CONTAINS: "contains" }
 const filters = ref({
@@ -313,47 +263,53 @@ const formatDateTime = (d) => (d ? new Date(d).toLocaleString() : "")
 
 const openAddJob = () => router.push({ name: "jobCreateForm" })
 
+const fetchApplicantResumeData = async (applicant) => {
+  try {
+    const res = await ApiService.get(`/jobApplicants/findById/${applicant.id}`)
+    const resumeId = res.data.resume?.id
+    let education = [], certifications = [], experience = []
+
+    if (resumeId) {
+      const [eduRes, certRes, expRes] = await Promise.all([
+        ApiService.get(`/education/findByResumeId/${resumeId}`),
+        ApiService.get(`/certification/findByResumeId/${resumeId}`),
+        ApiService.get(`/resumeExperiences/findByResumeId/${resumeId}`)
+      ])
+      education = eduRes.data || []
+      certifications = certRes.data || []
+      experience = expRes.data || []
+    }
+
+    return {
+      id: applicant.id,
+      username: res.data.seeker.user.username,
+      summary: res.data.seeker.summary,
+      education,
+      certifications,
+      experience
+    }
+  } catch (err) {
+    console.error("Failed to fetch resume data:", applicant.id, err)
+    return null
+  }
+}
+
 const openDialog = async (job) => {
   selectedJob.value = JSON.parse(JSON.stringify(job))
   if (!selectedJob.value.provider) selectedJob.value.provider = { username: "", email: "" }
   visible.value = true
+
   try {
     const res = await ApiService.get(`/jobApplicants/findApplicantsByJobId/${job.id}`)
     applicants.value = res.data
+
+    // Preload all applicant resumes
+    const resumeData = await Promise.all(applicants.value.map(fetchApplicantResumeData))
+    applicantResumes.value = resumeData.filter(a => a !== null)
   } catch (err) {
     console.error("Error fetching applicants:", err)
     applicants.value = []
-  }
-}
-
-const openEditDialog = (job) => {
-  editingJob.value = { ...job }
-  editDialogVisible.value = true
-}
-
-const updateJob = async () => {
-  try {
-    await ApiService.put(`/jobDetail/updateJobDetail`, editingJob.value)
-    toast.add({ severity: "success", summary: "Success", detail: "Job updated", life: 3000 })
-    editDialogVisible.value = false
-    fetchJobs()
-  } catch {
-    toast.add({ severity: "error", summary: "Error", detail: "Failed to update job", life: 3000 })
-  }
-}
-
-const confirmDelete = (job) => {
-  jobToDelete.value = { ...job }
-  deleteDialogVisible.value = true
-}
-const deleteJob = async () => {
-  try {
-    await ApiService.delete(`/jobDetail/delete/${jobToDelete.value.id}`)
-    toast.add({ severity: "success", summary: "Deleted", detail: "Job deleted", life: 3000 })
-    deleteDialogVisible.value = false
-    fetchJobs()
-  } catch {
-    toast.add({ severity: "error", summary: "Error", detail: "Failed to delete job", life: 3000 })
+    applicantResumes.value = []
   }
 }
 
@@ -364,24 +320,27 @@ const viewResume = async (applicant) => {
     const resumeId = selectedApplicant.value.resume?.id
 
     if (resumeId) {
-      const eduRes = await ApiService.get(`/education/findByResumeId/${resumeId}`)
+      const [eduRes, certRes, expRes] = await Promise.all([
+        ApiService.get(`/education/findByResumeId/${resumeId}`),
+        ApiService.get(`/certification/findByResumeId/${resumeId}`),
+        ApiService.get(`/resumeExperiences/findByResumeId/${resumeId}`)
+      ])
       applicantEducation.value = eduRes.data || []
-      const certRes = await ApiService.get(`/certification/findByResumeId/${resumeId}`)
       applicantCertifications.value = certRes.data || []
-      const expRes = await ApiService.get(`/resumeExperiences/findByResumeId/${resumeId}`)
       applicantExperience.value = expRes.data || []
     } else {
       applicantEducation.value = []
       applicantCertifications.value = []
       applicantExperience.value = []
     }
+
     applicantDialogVisible.value = true
   } catch {
     toast.add({ severity: "error", summary: "Error", detail: "Failed to load applicant details", life: 3000 })
   }
 }
 
-// ---------------------- STATUS MANAGEMENT -------------------------
+// ---------------- STATUS MANAGEMENT ----------------
 const updateApplicantStatus = async (applicant, status, successMsg) => {
   try {
     await ApiService.put(`/jobApplicants/update`, { ...applicant, status })
@@ -391,43 +350,61 @@ const updateApplicantStatus = async (applicant, status, successMsg) => {
       applicants.value = res.data
     }
   } catch {
-    toast.add({ severity: "error", summary: "Error", detail: `Failed to set ${status}`, life: 3000 })
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to update status", life: 3000 })
   }
 }
 
-// Approve
-const confirmApprove = (a) => {
-  applicantToApprove.value = a
-  approveDialogVisible.value = true
-}
-const approveApplicant = () => {
-  if (applicantToApprove.value) {
-    updateApplicantStatus(applicantToApprove.value, "accepted", "Approved")
-    approveDialogVisible.value = false
+const confirmApprove = (applicant) => updateApplicantStatus(applicant, "accepted", "Approved")
+const confirmReject = (applicant) => updateApplicantStatus(applicant, "rejected", "Rejected")
+const confirmReview = (applicant) => updateApplicantStatus(applicant, "reviewing", "In Review")
+
+// ---------------- AI RANKING ----------------
+import axios from "axios"
+
+const rankWithAI = async () => {
+  if (!selectedJob.value || !applicantResumes.value.length) {
+    return toast.add({ severity: "warn", summary: "No data", detail: "No applicants to rank", life: 3000 })
+  }
+
+  try {
+    const payload = {
+      job: {
+        title: selectedJob.value.title,
+        description: selectedJob.value.description,
+        requirements: selectedJob.value.requirements || ""
+      },
+      applicants: applicantResumes.value.map(a => ({
+        id: a.id,
+        title: a.username,
+        summary: a.summary,
+        skills: "",
+        education: a.education.map(e => ({ degree: e.degree, institution: e.institution })),
+        experience: a.experience.map(e => ({ jobTitle: e.jobTitle, companyName: e.companyName, description: e.description })),
+        certifications: a.certifications.map(c => ({ title: c.certificationTitle, org: c.issuingOrg }))
+      }))
+    }
+
+    toast.add({ severity: "info", summary: "Ranking...", detail: "Sending data to AI API", life: 3000 })
+
+    // Direct Axios call to Flask API
+    const res = await axios.post("http://localhost:5000/rank_applicants", payload) // replace URL if needed
+
+    rankedApplicants.value = res.data.map((r) => {
+      const app = applicantResumes.value.find(a => a.id === r.applicantId)
+      return {
+        id: r.applicantId,
+        username: app.username,
+        summary: app.summary,
+        aiScore: r.score
+      }
+    })
+
+    rankedDialogVisible.value = true
+    toast.add({ severity: "success", summary: "AI Ranking Complete", detail: "Applicants ranked successfully", life: 3000 })
+  } catch (err) {
+    console.error("AI ranking failed:", err)
+    toast.add({ severity: "error", summary: "Error", detail: "Failed to rank applicants", life: 3000 })
   }
 }
 
-// Review
-const confirmReview = (a) => {
-  applicantToReview.value = a
-  reviewDialogVisible.value = true
-}
-const reviewApplicant = () => {
-  if (applicantToReview.value) {
-    updateApplicantStatus(applicantToReview.value, "reviewing", "Reviewing")
-    reviewDialogVisible.value = false
-  }
-}
-
-// Reject
-const confirmReject = (a) => {
-  applicantToReject.value = a
-  rejectDialogVisible.value = true
-}
-const rejectApplicant = () => {
-  if (applicantToReject.value) {
-    updateApplicantStatus(applicantToReject.value, "rejected", "Rejected")
-    rejectDialogVisible.value = false
-  }
-}
 </script>

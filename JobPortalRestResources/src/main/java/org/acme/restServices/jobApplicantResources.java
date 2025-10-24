@@ -51,4 +51,10 @@ public class jobApplicantResources {
         return jobApplicationBean.updateJobApplicant(jobApplicants);
     }
 
+    @GET
+    @Path("/getApplicantsCount")
+    public Response findApplicantCount(){
+        return jobApplicationBean.findJobApplicationCount();
+    }
+
 }

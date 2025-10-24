@@ -66,4 +66,13 @@ public class JobApplicationBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Update Failed").build();
         }
     }
+
+    public Response findJobApplicationCount(){
+        try{
+            Long jobApplicationCount = jobApplicantController.findJobApplicantCount();
+            return Response.status(Response.Status.ACCEPTED).entity(jobApplicationCount).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to fetch the applicants count").build();
+        }
+    }
 }

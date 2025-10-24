@@ -5,6 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import org.acme.models.JobProviderDetail;
 
+import java.math.BigInteger;
+
 @ApplicationScoped
 public class JobProviderDetailFacade extends AbstractFacade<JobProviderDetail> {
     @Inject
@@ -18,4 +20,10 @@ public class JobProviderDetailFacade extends AbstractFacade<JobProviderDetail> {
     protected EntityManager getEntityManager() {
         return em;
     }
+
+    public Long findJobProviderCount() {
+        String jpql = "SELECT COUNT(j.id) FROM JobSeekerDetail j";
+        return em.createQuery(jpql, Long.class).getSingleResult();
+    }
+
 }
