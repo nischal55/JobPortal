@@ -105,6 +105,7 @@ const register = async () => {
     });
 
     console.log('Registration Response:', response.data);
+    localStorage.setItem("user_id",response.data.id)
     successMsg.value = 'Registration successful! Redirecting to login...';
     setTimeout(() => {
       if (role.value === 'provider') {

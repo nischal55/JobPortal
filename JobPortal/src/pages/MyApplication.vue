@@ -84,7 +84,7 @@ const updateApplication = (application) => {
             <Column header="S.N">
                 <template #body="{ index }">{{ index + 1 }}</template>
             </Column>
-            
+
             <Column header="Applied At" style="min-width: 12rem">
                 <template #body="{ data }">{{ new Date(data.appliedAt).toLocaleString() }}</template>
             </Column>
@@ -106,21 +106,26 @@ const updateApplication = (application) => {
             <Column field="status" header="Status" :filter="true" style="min-width: 10rem">
                 <template #body="{ data }">
                     <span :class="[
-                        'px-5 rounded-full text-white font-semibold',
-                        data.status === 'applied' ? 'bg-yellow-300' :
-                            data.status === 'reviewing' ? 'bg-blue-200' :
-                                data.status === 'accepted' ? 'bg-green-200' :
-                                    data.status === 'rejected' ? 'bg-red-200' : ''
+                        'px-3 py-1 rounded-full text-sm font-semibold text-center capitalize',
+                        data.status === 'applied'
+                            ? 'bg-amber-100 text-amber-700'
+                            : data.status === 'reviewing'
+                                ? 'bg-blue-100 text-blue-700'
+                                : data.status === 'accepted'
+                                    ? 'bg-emerald-100 text-emerald-700'
+                                    : data.status === 'rejected'
+                                        ? 'bg-rose-100 text-rose-700'
+                                        : 'bg-gray-100 text-gray-700'
                     ]">
                         {{ data.status }}
                     </span>
                 </template>
+
                 <template #filter="{ filterModel }">
                     <Dropdown v-model="filterModel.value" :options="statusOptions" optionLabel="label"
-                        optionValue="value" placeholder="Select Status" />
+                        optionValue="value" placeholder="Select Status" class="w-full" />
                 </template>
             </Column>
-
         </DataTable>
     </div>
 </template>

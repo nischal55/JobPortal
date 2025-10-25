@@ -64,8 +64,7 @@
                     <Column field="Action" header="Action">
                         <template #body="{ data }">
                             <div class="flex gap-2">
-                                <Button icon="pi pi-eye" class="p-button-sm" title="View Provider's Detail" />
-                                <Button icon="pi pi-ban" class="p-button-sm p-button-danger" title="Block Provider" />
+                                <Button icon="pi pi-ban" class="p-button-sm p-button-danger" title="Block Provider" @click="banUser(data.user?.id)"/>
                             </div>
                         </template>
                     </Column>
@@ -120,6 +119,23 @@ const clearFilter = () => {
         filters.value[key].value = null;
     }
 };
+const banUser = async (userId) => {
+  if (!userId) return;
+
+  try {
+    // Step 1: Fetch user info
+    await ApiService.get(`/users/findById/${userId}`);
+
+    // Step 2: Ban user
+    const res = await ApiService.put(`/users/ban/${userId}`);
+    alert(res.data.message || "User banned for 1 hour");
+
+  } catch (err) {
+    console.error("Error banning user:", err);
+    alert("Failed to ban user.");
+  }
+};
+
 </script>
 
 <style scoped>

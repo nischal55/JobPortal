@@ -151,7 +151,7 @@ function applyToJob() {
       toast.add({
         severity: 'error',
         summary: 'Application Failed',
-        detail: 'There was a problem submitting your application.',
+        detail: 'You are not Logged in. First Login to apply',
         life: 3000
       })
     })

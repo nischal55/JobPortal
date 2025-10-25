@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 import org.acme.bean.UserDetailBean;
 import org.acme.models.UserDetail;
+import org.acme.utils.BanCacheService;
 
 import java.util.Map;
 
@@ -62,5 +63,22 @@ public class userResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response check(@CookieParam("access_token") String accessToken) {
         return userDetailBean.checkAccessToken(accessToken);
+    }
+
+    @Inject
+    BanCacheService banCacheService;
+
+    @PUT
+    @Path("/ban/{id}")
+    public Response banUser(@PathParam("id") Long userId) {
+        banCacheService.banUser(userId);
+        return Response.ok(Map.of("message", "User banned for 1 hour")).build();
+    }
+
+    @GET
+    @Path("/is-banned/{id}")
+    public Response isBanned(@PathParam("id") Long userId) {
+        boolean banned = banCacheService.isUserBanned(userId);
+        return Response.ok(Map.of("userId", userId, "banned", banned)).build();
     }
 }

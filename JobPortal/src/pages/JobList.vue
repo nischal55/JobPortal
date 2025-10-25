@@ -97,7 +97,7 @@
       <Column field="appliedAt" header="Applied On"><template #body="{ data }">{{ formatDateTime(data.appliedAt) }}</template></Column>
       <Column field="status" header="Status">
         <template #body="{ data }">
-          <Tag :value="data.status"
+          <Tag :value="data.status" class="capitalize"
             :severity="data.status === 'applied' ? 'warn' : data.status === 'reviewing' ? 'info' : data.status === 'accepted' ? 'success' : 'danger'" />
         </template>
       </Column>

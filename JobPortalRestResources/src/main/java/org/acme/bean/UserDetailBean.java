@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 import org.acme.controllers.UserDetailController;
 import org.acme.models.UserDetail;
+import org.acme.utils.BanCacheService;
 import org.acme.utils.JwtUtil;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
@@ -30,8 +31,15 @@ public class UserDetailBean {
         }
         try{
             userDetailController.createUser(userDetail);
+            String accessToken = JwtUtil.generateAccessToken(userDetail.getUsername(), userDetail.getRole().name());
+            String refreshToken = JwtUtil.generateRefreshToken(userDetail.getUsername(), userDetail.getRole().name());
+
+            NewCookie accessCookie = new NewCookie("access_token", accessToken, "/", null, "access", 900, false, true);
+            NewCookie refreshCookie = new NewCookie("refresh_token", refreshToken, "/", null, "refresh", 604800, false, true);
+
             if (userDetail.getId() != null) {
                 return Response.status(Response.Status.CREATED)
+                        .cookie(accessCookie, refreshCookie)
                         .entity(userDetail)
                         .build();
             } else {
@@ -82,6 +90,8 @@ public class UserDetailBean {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to delete the record").build();
         }
     }
+    @Inject
+    BanCacheService banCacheService;
 
     public Response login(UserDetail loginRequest, @Context UriInfo uriInfo) {
         UserDetail user = userDetailController.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
@@ -96,6 +106,12 @@ public class UserDetailBean {
         NewCookie refreshCookie = new NewCookie("refresh_token", refreshToken, "/", null, "refresh", 604800, false, true);
 
         user.setPassword(null);
+
+        if (banCacheService.isUserBanned(user.getId())) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity(Map.of("error", "User is temporarily banned. Try again later."))
+                    .build();
+        }
 
         return Response.ok()
                 .cookie(accessCookie, refreshCookie)

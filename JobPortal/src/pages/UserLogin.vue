@@ -138,8 +138,8 @@ const login = async () => {
   } catch (error) {
     console.error("Login error:", error);
 
-    if (error.response?.data?.message) {
-      errorMsg.value = error.response.data.message;
+    if (error.response?.data?.error) {
+      errorMsg.value = error.response.data.error;
     } else {
       errorMsg.value = 'Login failed. Please check your credentials.';
     }
