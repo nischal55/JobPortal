@@ -32,4 +32,13 @@ public class UserDetailFacade extends AbstractFacade<UserDetail> {
             return null;
         }
     }
+
+    public UserDetail findById(Long id){
+        try{
+            TypedQuery<UserDetail> query = em.createQuery("SELECT u from UserDetail u where u.id = :id", UserDetail.class);
+            return query.setParameter("id", id).getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+    }
 }

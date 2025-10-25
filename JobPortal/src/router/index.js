@@ -16,6 +16,8 @@ import JobApplicantsList from '@/pages/JobApplicantsList.vue'
 import JobList from '@/pages/JobList.vue'
 import JobProviderList from '@/pages/JobProviderList.vue'
 import ResumeTemplate from '@/pages/ResumeTemplate.vue'
+import Support from '@/pages/Support.vue'
+import AdminSupport from '@/pages/AdminSupport.vue'
 
 const routes = [
   {
@@ -105,6 +107,18 @@ const routes = [
     path: '/viewResume',
     name: 'viewResume',
     component : ResumeTemplate,
+    meta: { requiresAuth: true },
+  },  
+  {
+    path: '/support',
+    name: 'support',
+    component : Support,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/adminSupport',
+    name: 'adminSupport',
+    component : AdminSupport,
     meta: { requiresAuth: true },
   },
 
