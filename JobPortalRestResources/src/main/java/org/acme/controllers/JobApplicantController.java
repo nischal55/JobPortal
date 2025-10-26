@@ -18,9 +18,16 @@ public class JobApplicantController {
     @Transactional
     public void create(JobApplicants jobApplicants){
         try{
+            Long jobid = jobApplicants.getJob().getId();
+            Long seekerId = jobApplicants.getSeeker().getId();
+            JobApplicants alreadyApplied = jobApplicantfacade.findJobApplicantsByJobIdAndSeekerId(jobid,seekerId);
+            if(alreadyApplied != null){
+                throw new IllegalStateException("You have already applied to this job");
+            }
             jobApplicantfacade.create(jobApplicants);
         }catch(Exception e){
             e.printStackTrace();
+            throw e;
         }
     }
 

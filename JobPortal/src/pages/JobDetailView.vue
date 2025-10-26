@@ -70,7 +70,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import ApiService from '@/services/ApiService'
 import navbar from '@/components/navbar.vue'
 import Button from 'primevue/button'
@@ -85,6 +85,8 @@ const relatedJobs = ref([])
 
 const seekerId = localStorage.getItem('jobseeker_id')
 const resumeId = localStorage.getItem('resume_detail_id')
+const userId = localStorage.getItem("user_id")
+const router = useRouter();
 
 onMounted(() => {
   fetchJobDetails()
@@ -123,7 +125,11 @@ function confirmApply() {
     acceptLabel: 'Yes, Apply',
     rejectLabel: 'Cancel',
     accept: () => {
-      applyToJob()
+      if(userId == null){
+        router.push('/userLogin')
+      }else{
+        applyToJob()
+      }
     }
   })
 }
@@ -151,7 +157,7 @@ function applyToJob() {
       toast.add({
         severity: 'error',
         summary: 'Application Failed',
-        detail: 'You are not Logged in. First Login to apply',
+        detail: err.response.data,
         life: 3000
       })
     })

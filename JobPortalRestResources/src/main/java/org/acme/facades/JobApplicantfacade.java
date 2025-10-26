@@ -53,4 +53,18 @@ public class JobApplicantfacade extends AbstractFacade<JobApplicants>{
         String jpql = "SELECT COUNT(j.id) FROM JobApplicants j";
         return em.createQuery(jpql, Long.class).getSingleResult();
     }
+
+    public JobApplicants findJobApplicantsByJobIdAndSeekerId(Long jobId, Long seekerId){
+        JobApplicants jobApplicants = null;
+        try{
+            TypedQuery<JobApplicants> query = em.createQuery("SELECT j from JobApplicants j where j.job.id = :jobId and j.seeker.id = :seekerId", JobApplicants.class);
+            query.setParameter("jobId",jobId);
+            query.setParameter("seekerId",seekerId);
+            jobApplicants =  query.getSingleResult();
+            return jobApplicants;
+        }catch (Exception e){
+            return jobApplicants;
+        }
+
+    }
 }

@@ -18,7 +18,7 @@ public class JobApplicationBean {
             jobApplicantController.create(jobApplicants);
             return Response.status(Response.Status.ACCEPTED).entity("Created Successfully").build();
         }catch(Exception e){
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to create").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Already Applied to the job").build();
         }
     }
 
