@@ -37,7 +37,7 @@ public abstract class AbstractFacade<T> {
     // Find all
     public List<T> findAll() {
         return getEntityManager()
-                .createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass)
+                .createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e order by id desc", entityClass)
                 .getResultList();
     }
 

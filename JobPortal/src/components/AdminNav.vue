@@ -18,9 +18,6 @@
       <!-- Dropdown -->
       <div v-show="isProfileOpen" id="profile-dropdown"
         class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-2 z-50 cursor-pointer">
-        <button class="block w-full px-4 py-2 text-left text-slate-600 hover:bg-gray-100 cursor-pointer">
-          My Profile
-        </button>
         <button @click="logout" class="block w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100 cursor-pointer">
           Logout
         </button>

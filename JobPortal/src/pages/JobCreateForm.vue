@@ -76,6 +76,7 @@ import Button from 'primevue/button'
 import Sidebar from '@/components/Sidebar.vue'
 import AdminNav from '@/components/AdminNav.vue'
 import ApiService from '@/services/ApiService'
+import { useRouter } from 'vue-router'
 // import axios from 'axios' // Uncomment if using axios
 
 const types = ['full_time', 'part_time', 'internship', 'contract']
@@ -93,10 +94,13 @@ const job = ref({
   }
 })
 
+const router = useRouter();
+
 const submitForm = () => {
   ApiService.post('http://localhost:8888/jobDetail/create', job.value)
     .then(response => {
       console.log('Job posted successfully:', response.data)
+      router.push('jobList')
     })
     .catch(error => {
       console.error('Error posting job:', error)

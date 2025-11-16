@@ -39,7 +39,7 @@
           <i class="pi pi-briefcase text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Posted Jobs</span>
         </a>
-        <a href="/adminSupport" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
+        <a href="/adminSupport"  v-if="userRole === 'admin'" class="flex items-center gap-3 px-4 py-3 rounded-md transition-colors text-green-200 hover:bg-green-600 hover:text-green-100">
           <i class="pi pi-cog text-lg"></i>
           <span v-if="isOpen" class="whitespace-nowrap">Admin Support</span>
         </a>

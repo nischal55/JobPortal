@@ -9,7 +9,6 @@ CORS(app)  # Enable CORS for all routes
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-
 # --- Utility ---
 def clean_text(text):
     if not text:
